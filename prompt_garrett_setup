@@ -162,7 +162,7 @@ function prompt_garrett_preexec
 	export prompt_garrett_preexec_cmd="\$ $1"
 
 	# Ensure terminal code isn't colored from prompt
-	print -n "$prompt_garrett_reset_color"
+	print -n "$reset_color"
 }
 
 #
