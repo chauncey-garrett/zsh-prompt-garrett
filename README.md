@@ -38,19 +38,12 @@ Features may be disabled and rearranged as desired by using the corresponding to
 
 ## Like it?
 
-If you have feature suggestions, please open an [issue][1]. If you have contributions, open a [pull request][2]. I'd love to have your feedback.
+If you have feature suggestions, please open an [issue](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues"). If you have contributions, open a [pull request](https://github.com/chauncey-garrett/zsh-prompt-garrett/pull-request "chauncey-garrett/zsh-prompt-garrett/pulls"). I'd love to have your feedback.
 
 ## Author(s)
 
-*The author(s) of this module should be contacted via the [issue tracker][3].*
+*The author(s) of this module should be contacted via the [issue tracker](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues").*
 
-  - [Chauncey Garrett][4]
+  - [Chauncey Garrett](https://github.com/chauncey-garrett "chauncey-garrett")
 
-[![][5]](http://chauncey.io/about/index.html#donate)
-
-
-[1]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues"
-[2]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pull-request "chauncey-garrett/zsh-prompt-garrett/pulls"
-[3]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues"
-[4]: https://github.com/chauncey-garrett "chauncey-garrett"
-[5]: /img/donate.png
+[![](/img/donate.png)](http://chauncey.io/about/index.html#donate)
