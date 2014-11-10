@@ -46,4 +46,4 @@ If you have feature suggestions, please open an [issue](https://github.com/chaun
 
   - [Chauncey Garrett](https://github.com/chauncey-garrett "chauncey-garrett")
 
-[![](/img/donate.png)](http://chauncey.io/about/index.html#donate)
+[![](/img/tip.gif)](http://chauncey.io/about/index.html#tip)
