@@ -147,7 +147,13 @@ function prompt_garrett_chpwd
 	emulate -L zsh
 
 	# list the contents of the new directory
-	gls --group-directories-first --color=auto
+	if (( $+commands[gls] ))
+	then
+		gls --group-directories-first --color=auto
+	else
+		ls
+	fi
+
 }
 
 #
