@@ -202,31 +202,31 @@ function prompt_garrett_precmd
     	git-info
     fi
 
-		#
-		# Add a line to prompt for visibility
-		#
+	#
+	# Add a line to prompt for visibility
+	#
 
-		# Determine the width
-		local prompt_garrett_width_terminal
-		(( prompt_garrett_width_terminal= ${COLUMNS} - 1 ))
+	# Determine the width
+	local prompt_garrett_width_terminal
+	(( prompt_garrett_width_terminal= ${COLUMNS} - 1 ))
 
-		# Determine the length needed for prompt_garrett_space
-		# NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work
-		local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
-		local zero='%([BSUbfksu]|([FB]|){*})'
-		local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
+	# Determine the length needed for prompt_garrett_space
+	# NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work
+	local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
+	local zero='%([BSUbfksu]|([FB]|){*})'
+	local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
-		# Calc the padding
-		local prompt_garrett_space_padding
-		(( prompt_garrett_space_padding= ${prompt_garrett_width_terminal} - ${prompt_garrett_width_line1} ))
+	# Calc the padding
+	local prompt_garrett_space_padding
+	(( prompt_garrett_space_padding= ${prompt_garrett_width_terminal} - ${prompt_garrett_width_line1} ))
 
-		# Add the correct number of characters
-		local prompt_space_character="${prompt_garrett_altchar_padding}"
-		eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
+	# Add the correct number of characters
+	local prompt_space_character="${prompt_garrett_altchar_padding}"
+	eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
 
-		# Prompt line 1
-		print
-		print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+	# Prompt line 1
+	print
+	print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
 }
 
 #
