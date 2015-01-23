@@ -1,9 +1,5 @@
 # Garrett Zsh Theme for Prezto
 
-<div class="cb-tip-button" data-content-location="" data-href="//www.coinbase.com/tip_buttons/show_tip" data-to-user-id="54834910c8b9a68cbd000037"></div>
-<script>!function(d,s,id) {var js,cjs=d.getElementsByTagName(s)[0],e=d.getElementById(id);if(e){return;}js=d.createElement(s);js.id=id;js.src="https://www.coinbase.com/assets/tips.js";cjs.parentNode.insertBefore(js,cjs);}(document, 'script', 'coinbase-tips');</script>
-
-
 *My very own personal prompt... Enjoy!*
 
 A prompt with the information you need the moment you need it.
@@ -50,4 +46,4 @@ If you have feature suggestions, please open an [issue](https://github.com/chaun
 
   - [Chauncey Garrett](https://github.com/chauncey-garrett "chauncey-garrett")
 
-[![](/img/tip.gif)](http://chauncey.io/about/index.html#tip)
+[![](/img/tip.gif)](http://chauncey.io/reader-support/)
