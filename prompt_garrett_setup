@@ -47,14 +47,14 @@ pmodload 'helper'
 
 	# Path (path type - possible values):
 		# ratio - use COLUMNS/ratio to clip the path. Default.
-		# fixed - use a fixed maximum lenght.
+		# fixed - use a fixed maximum length.
 		# subdir - clip by number of subdirectories.
 		# full - show the full path
 
 	# Path length styles:
 		# ratio  | the ratio for the 'ratio' path style, funnily enough. Defaults to 6.
 		# length | the maximum length for the 'fixed' path style. Defaults to 20.
-		# subdir | the number of subdirs to show for the 'subdir' path style. Defaults to 3.
+		# subdir | the number of subdirectories to show for the 'subdir' path style. Defaults to 3.
 
 	# You can set styles in the current terminal to test things out, values will be updated.
 
