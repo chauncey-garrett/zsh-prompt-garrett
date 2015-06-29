@@ -38,12 +38,17 @@ Features may be disabled and rearranged as desired by using the corresponding to
 
 ## Like it?
 
-If you have feature suggestions, please open an [issue](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues"). If you have contributions, open a [pull request](https://github.com/chauncey-garrett/zsh-prompt-garrett/pull-request "chauncey-garrett/zsh-prompt-garrett/pulls"). I'd love to have your feedback.
+If you've found this project useful, would you consider sending your support?
 
-## Author(s)
+- [Contribute Feedback](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues) or a [Pull Request](https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls)
+- [Provide Support](http://chauncey.io/donate/)
+- [Give Bitcoin](https://www.coinbase.com/ChaunceyGarrett)
 
-*The author(s) of this module should be contacted via the [issue tracker](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues").*
+## Author
 
-  - [Chauncey Garrett](https://github.com/chauncey-garrett "chauncey-garrett")
+*The author of this module should be contacted via the [issue tracker](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues "chauncey-garrett/zsh-prompt-garrett/issues").*
 
-[![](/img/tip.gif)](http://chauncey.io/reader-support/)
+| [![](http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g)](http://chauncey.io) |
+| :------------------------------------------------------------------------------------------------------: |
+| [Chauncey Garrett](http://chauncey.io) - [@chauncey_io](http://twitter.com/chauncey_io)                  |
+
