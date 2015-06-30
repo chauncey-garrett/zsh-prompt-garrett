@@ -443,7 +443,7 @@ function prompt_garrett_setup
 	export PROMPT3='
 (?) ${editor_info[keymap]}'
 
-	export PROMPT4='${blue}$0${prompt_garrett_color_prompt}@${yellow}%i+ '
+	export PROMPT4='${yellow}+${blue}%N ${green}@${magenta}%i ${reset_color}'
 
 	export SPROMPT='
 ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
