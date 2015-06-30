@@ -107,28 +107,28 @@ function prompt_garrett_number_jobs
 
 #
 # Notifications
-#     - notify of command completion after x amount of time has passed
+#     - notify of command completion after n seconds has passed
 #
 
 function prompt_garrett_precmd_notification
 {
-	# trigger a notification after x time has elapsed
+	# trigger a notification after n seconds have elapsed
 	prompt_garrett_delay_after_notification=1
 
-	# determine x time elapsed
+	# determine time elapsed
 	prompt_garrett_precmd_time_elapsed_start=${prompt_garrett_preexec_time:-$(date +'%s')}
 	prompt_garrett_precmd_time_elapsed_stop=$(date +'%s')
 	let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
 
 	# notify!
 	if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]
-	then # x time has passed, so notify!
+	then # n seconds have passed, so notify!
 		if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] ))
 		then
-			terminal-notifier -title "${prompt_garrett_preexec_cmd:-Unknown command}" -message "required $prompt_garrett_precmd_time_elapsed s" -sound Tink
+			terminal-notifier -title "${prompt_garrett_preexec_cmd:-Unknown command}" -message "Required $prompt_garrett_precmd_time_elapsed s" -sound Tink
 		elif [[ "$OSTYPE" == darwin* ]] && (( $+commands[growlnotify] ))
 		then
-			growlnotify -n "Terminal" -t "${prompt_garrett_preexec_cmd:-Unknown command}" -m "required $prompt_garrett_precmd_time_elapsed s"
+			growlnotify -n "Terminal" -t "${prompt_garrett_preexec_cmd:-Unknown command}" -m "Required $prompt_garrett_precmd_time_elapsed s"
 		else
 			tput bel
 		fi
