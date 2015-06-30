@@ -211,7 +211,7 @@ function prompt_garrett_precmd
 	local zero='%([BSUbfksu]|([FB]|){*})'
 	local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
-	# Calc the padding
+	# Calculate the padding
 	local prompt_garrett_space_padding
 	(( prompt_garrett_space_padding= ${prompt_garrett_width_terminal} - ${prompt_garrett_width_line1} ))
 
@@ -275,8 +275,8 @@ function prompt_garrett_setup
 
 		# set style
 	    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m'             # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}'  # user@host.name
+		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
 	elif [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]
 	then # on SSH
@@ -288,8 +288,8 @@ function prompt_garrett_setup
 
 		# set style
 	    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m'             # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}'  # user@host.name
+		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
 	else # normal user
 
@@ -300,8 +300,8 @@ function prompt_garrett_setup
 
 		# set style
 		eval prompt_garrett_user=''
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m'             # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}'  # user@host.name
+		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
 	fi
 
@@ -380,7 +380,7 @@ function prompt_garrett_setup
 	# Git prompt styles
 	zstyle ':prezto:module:git:info:keys' format \
 		'prompt_info'     "%b" \
-		'rprompt'         "[%R]" \
+		'rprompt'         "%R" \
 		'local_status'    "%C%D%a%d%m%r%U%u" \
 		'remote_status'   "%B%A%S" \
 		'sha'             "%c" \
@@ -420,13 +420,13 @@ function prompt_garrett_setup
 	#
 	# Finally!
 	#
-	#   | PROMPT   | Left
-	#   | RPROMPT  | Right
-	#   | PROMPT2  | Continuation
-	#   | PROMPT3  | Selection
-	#   | PROMPT4  | Execution trace
-	#   | SPROMPT  | Autocorrection
-	#   | SUDO_PS1 | Backup root prompt
+	#   PROMPT   | Left
+	#   RPROMPT  | Right
+	#   PROMPT2  | Continuation
+	#   PROMPT3  | Selection
+	#   PROMPT4  | Execution trace
+	#   SPROMPT  | Autocorrection
+	#   SUDO_PS1 | Backup root prompt
 	#
 
 	if (( $SHLVL == 1 ))
@@ -448,7 +448,6 @@ function prompt_garrett_setup
 ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
 
 	export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
-
 }
 
 prompt_garrett_setup "$@"
