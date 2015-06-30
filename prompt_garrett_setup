@@ -138,22 +138,27 @@ function prompt_garrett_precmd_notification
 #
 # PROMPT | prompt_garrett_chpwd
 # 	  - a function which is executed whenever the directory is changed
-# 	  NOTE: requires GNU Coreutils
 #
 
 function prompt_garrett_chpwd
 {
-	# guarantee a know Zsh configuration
-	emulate -L zsh
-
 	# list the contents of the new directory
-	if (( $+commands[gls] ))
-	then
-		gls --group-directories-first --color=auto
-	else
-		ls
+	if is-callable 'dircolors';
+	then # GNU flavor ls
+		if zstyle -t ':prezto:module:utility:ls' color
+	   	then
+			ls --group-directories-first --color=auto
+		else
+			ls -F
+		fi
+	else # BSD flavor ls
+		if zstyle -t ':prezto:module:utility:ls' color
+		then
+			ls -G
+		else
+			ls -F
+		fi
 	fi
-
 }
 
 #
