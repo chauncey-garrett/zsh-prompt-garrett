@@ -412,10 +412,10 @@ function prompt_garrett_setup
     prompt_garrett_altchar_enter="%{$terminfo[smacs]%}"
     prompt_garrett_altchar_leave="%{$terminfo[rmacs]%}"
     prompt_garrett_altchar_padding=${altchar[q]:--}
-    prompt_garrett_upper_left_corner=%{$terminfo[smacs]%}${altchar[l]:--}${altchar[q]:--}%{$terminfo[rmacs]%}
-    prompt_garrett_lower_left_corner=%{$terminfo[smacs]%}${altchar[m]:--}${altchar[q]:--}%{$terminfo[rmacs]%}
-    prompt_garrett_upper_right_corner=%{$terminfo[smacs]%}${altchar[q]:--}${altchar[k]:--}%{$terminfo[rmacs]%}
-    prompt_garrett_lower_right_corner=%{$terminfo[smacs]%}${altchar[q]:--}${altchar[j]:--}%{$terminfo[rmacs]%}
+    prompt_garrett_upper_left_corner=${prompt_garrett_altchar_enter}${altchar[l]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+    prompt_garrett_lower_left_corner=${prompt_garrett_altchar_enter}${altchar[m]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+    prompt_garrett_upper_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[k]:--}${prompt_garrett_altchar_leave}
+    prompt_garrett_lower_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[j]:--}${prompt_garrett_altchar_leave}
 
 	#
 	# Finally!
