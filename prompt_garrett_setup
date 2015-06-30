@@ -440,7 +440,8 @@ function prompt_garrett_setup
 
 	export PROMPT2='(%_) ${editor_info[keymap]}'
 
-	export PROMPT3='${yellow}#? '
+	export PROMPT3='
+(?) ${editor_info[keymap]}'
 
 	export PROMPT4='${blue}$0${prompt_garrett_color_prompt}@${yellow}%i+ '
 
