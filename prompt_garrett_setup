@@ -96,16 +96,6 @@ function prompt_garrett_pwd
 }
 
 #
-# PROMPT | prompt_garrett_number_jobs
-#     - determine the number of background jobs
-#
-
-function prompt_garrett_number_jobs
-{
-	number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j.) "
-}
-
-#
 # Notifications
 #     - notify of command completion after n seconds has passed
 #
@@ -187,7 +177,7 @@ function prompt_garrett_precmd
     unsetopt XTRACE KSH_ARRAYS
 
 	# Show number of background jobs
-	prompt_garrett_number_jobs
+	prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
 
 	# Format PWD
     prompt_garrett_pwd
