@@ -127,7 +127,7 @@ function prompt_garrett_precmd_notification
 
 #
 # PROMPT | prompt_garrett_chpwd
-# 	  - a function which is executed whenever the directory is changed
+#    - a function which is executed whenever the directory is changed
 #
 
 function prompt_garrett_chpwd
@@ -136,7 +136,7 @@ function prompt_garrett_chpwd
 	if is-callable 'dircolors';
 	then # GNU flavor ls
 		if zstyle -t ':prezto:module:utility:ls' color
-	   	then
+		then
 			ls --group-directories-first --color=auto
 		else
 			ls -F
@@ -173,14 +173,14 @@ function prompt_garrett_preexec
 
 function prompt_garrett_precmd
 {
-    setopt LOCAL_OPTIONS
-    unsetopt XTRACE KSH_ARRAYS
+	setopt LOCAL_OPTIONS
+	unsetopt XTRACE KSH_ARRAYS
 
 	# Show number of background jobs
 	prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
 
 	# Format PWD
-    prompt_garrett_pwd
+	prompt_garrett_pwd
 
 	# Trigger a notification after x time has elapsed
 	eval prompt_garrett_precmd_notification
@@ -188,14 +188,14 @@ function prompt_garrett_precmd
 	# Get ruby info
     if (( $+functions[ruby-info] ))
 	then
-    	ruby-info
-    fi
+		ruby-info
+	fi
 
 	# Get git repository info
-    if (( $+functions[git-info] ))
+	if (( $+functions[git-info] ))
 	then
-    	git-info
-    fi
+		git-info
+	fi
 
 	#
 	# Add a line to prompt for visibility
@@ -226,20 +226,20 @@ function prompt_garrett_precmd
 
 #
 # PROMPT | prompt_garrett_setup
-#     - finally, configure the prompt
+#    - finally, configure the prompt
 #
 
 function prompt_garrett_setup
 {
 	# Load necessary modules
-    setopt LOCAL_OPTIONS
-    unsetopt XTRACE KSH_ARRAYS
-    prompt_opts=(cr percent subst)
+	setopt LOCAL_OPTIONS
+	unsetopt XTRACE KSH_ARRAYS
+	prompt_opts=(cr percent subst)
 
-    # Add hooks for calling preexec, precmd & chpwd
+	# Add hooks for calling preexec, precmd & chpwd
 	autoload -Uz add-zsh-hook
 	add-zsh-hook preexec prompt_garrett_preexec
-    add-zsh-hook precmd prompt_garrett_precmd
+	add-zsh-hook precmd prompt_garrett_precmd
 	add-zsh-hook chpwd prompt_garrett_chpwd
 
 	#
@@ -271,10 +271,10 @@ function prompt_garrett_setup
 		# set colors
 		eval prompt_garrett_color_user=${3:-'${red}'}
 		eval prompt_garrett_color_host=${3:-'${red}'}
-	    eval prompt_garrett_color_prompt=${3:-'${red}'}
+		eval prompt_garrett_color_prompt=${3:-'${red}'}
 
 		# set style
-	    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
+		eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
 		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
 		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
@@ -282,12 +282,12 @@ function prompt_garrett_setup
 	then # on SSH
 
 		# set colors
-	    eval prompt_garrett_color_user=${3:-'${green}'}
-	    eval prompt_garrett_color_host=${3:-'${yellow}'}
-	    eval prompt_garrett_color_prompt=${3:-'${yellow}'}
+		eval prompt_garrett_color_user=${3:-'${green}'}
+		eval prompt_garrett_color_host=${3:-'${yellow}'}
+		eval prompt_garrett_color_prompt=${3:-'${yellow}'}
 
 		# set style
-	    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
+		eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
 		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
 		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
@@ -295,8 +295,8 @@ function prompt_garrett_setup
 
 		# set colors
 		eval prompt_garrett_color_user=${1:-'${green}'}
-	    eval prompt_garrett_color_host=${1:-'${green}'}
-	    eval prompt_garrett_color_prompt=${1:-'${grey}'}
+		eval prompt_garrett_color_host=${1:-'${green}'}
+		eval prompt_garrett_color_prompt=${1:-'${grey}'}
 
 		# set style
 		eval prompt_garrett_user=''
@@ -353,29 +353,29 @@ function prompt_garrett_setup
 	# zstyle ':prezto:module:git:info' verbose 'yes'
 
 	# Git prompt info
-    zstyle ':prezto:module:git:info:branch'    format "${cyan} λ${prompt_garrett_color_prompt}:${green}%b"
-    zstyle ':prezto:module:git:info:remote'    format ""
-    zstyle ':prezto:module:git:info:action'    format "${yellow} %s"
-    zstyle ':prezto:module:git:info:position'  format "${red} %p"
+	zstyle ':prezto:module:git:info:branch'    format "${cyan} λ${prompt_garrett_color_prompt}:${green}%b"
+	zstyle ':prezto:module:git:info:remote'    format ""
+	zstyle ':prezto:module:git:info:action'    format "${yellow} %s"
+	zstyle ':prezto:module:git:info:position'  format "${red} %p"
 
 	# Git commit SHA
-    zstyle ':prezto:module:git:info:commit'    format "${yellow} %.7c"
+	zstyle ':prezto:module:git:info:commit'    format "${yellow} %.7c"
 
 	# Git remote status
-    zstyle ':prezto:module:git:info:behind'    format "${magenta} ⬇ "
-    zstyle ':prezto:module:git:info:ahead'     format "${magenta} ⬆ "
+	zstyle ':prezto:module:git:info:behind'    format "${magenta} ⬇ "
+	zstyle ':prezto:module:git:info:ahead'     format "${magenta} ⬆ "
 	zstyle ':prezto:module:git:info:diverged'  format "${magenta} ⥮"
-    zstyle ':prezto:module:git:info:stashed'   format "${cyan} ✭"
+	zstyle ':prezto:module:git:info:stashed'   format "${cyan} ✭"
 
 	# Git local status
-    zstyle ':prezto:module:git:info:clean'     format ""
-    zstyle ':prezto:module:git:info:dirty'     format "${prompt_garrett_color_prompt} |"
-    zstyle ':prezto:module:git:info:added'     format "${green} ✚"
-    zstyle ':prezto:module:git:info:deleted'   format "${red} ✗"
-    zstyle ':prezto:module:git:info:modified'  format "${blue} ✱"
-    zstyle ':prezto:module:git:info:renamed'   format "${magenta} ➜"
-    zstyle ':prezto:module:git:info:unmerged'  format "${yellow} ═"
-    zstyle ':prezto:module:git:info:untracked' format "${white} ◼"
+	zstyle ':prezto:module:git:info:clean'     format ""
+	zstyle ':prezto:module:git:info:dirty'     format "${prompt_garrett_color_prompt} |"
+	zstyle ':prezto:module:git:info:added'     format "${green} ✚"
+	zstyle ':prezto:module:git:info:deleted'   format "${red} ✗"
+	zstyle ':prezto:module:git:info:modified'  format "${blue} ✱"
+	zstyle ':prezto:module:git:info:renamed'   format "${magenta} ➜"
+	zstyle ':prezto:module:git:info:unmerged'  format "${yellow} ═"
+	zstyle ':prezto:module:git:info:untracked' format "${white} ◼"
 
 	# Git prompt styles
 	zstyle ':prezto:module:git:info:keys' format \
@@ -390,7 +390,7 @@ function prompt_garrett_setup
 	#     %v | ruby version
 	#
 
-    zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
+	zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
 
 	#
 	# Vim mode indicator
@@ -399,23 +399,23 @@ function prompt_garrett_setup
 	zstyle ':prezto:module:editor:info:keymap:primary'           format "${red}❱%(?.${prompt_garrett_color_prompt}.${red})❱❱ "
 	zstyle ':prezto:module:editor:info:keymap:alternate'         format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰ "
 	# zstyle ':prezto:module:editor:info:keymap:primary:insert'    format "${red}I "
-    zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
-    zstyle ':prezto:module:editor:info:completing'               format "${red}..."
+	zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
+	zstyle ':prezto:module:editor:info:completing'               format "${red}..."
 
 	#
-    # Use the extended character set, if available
+	# Use the extended character set, if available
 	#
 
-    typeset -A altchar
-    set -A altchar ${(s..)terminfo[acsc]}
-    prompt_garrett_altchar_enable="%{$terminfo[enacs]%}"
-    prompt_garrett_altchar_enter="%{$terminfo[smacs]%}"
-    prompt_garrett_altchar_leave="%{$terminfo[rmacs]%}"
-    prompt_garrett_altchar_padding=${altchar[q]:--}
-    prompt_garrett_upper_left_corner=${prompt_garrett_altchar_enter}${altchar[l]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
-    prompt_garrett_lower_left_corner=${prompt_garrett_altchar_enter}${altchar[m]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
-    prompt_garrett_upper_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[k]:--}${prompt_garrett_altchar_leave}
-    prompt_garrett_lower_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[j]:--}${prompt_garrett_altchar_leave}
+	typeset -A altchar
+	set -A altchar ${(s..)terminfo[acsc]}
+	prompt_garrett_altchar_enable="%{$terminfo[enacs]%}"
+	prompt_garrett_altchar_enter="%{$terminfo[smacs]%}"
+	prompt_garrett_altchar_leave="%{$terminfo[rmacs]%}"
+	prompt_garrett_altchar_padding=${altchar[q]:--}
+	prompt_garrett_upper_left_corner=${prompt_garrett_altchar_enter}${altchar[l]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+	prompt_garrett_lower_left_corner=${prompt_garrett_altchar_enter}${altchar[m]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+	prompt_garrett_upper_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[k]:--}${prompt_garrett_altchar_leave}
+	prompt_garrett_lower_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[j]:--}${prompt_garrett_altchar_leave}
 
 	#
 	# Finally!
