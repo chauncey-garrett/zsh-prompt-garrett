@@ -186,7 +186,7 @@ function prompt_garrett_precmd
 	eval prompt_garrett_precmd_notification
 
 	# Get ruby info
-    if (( $+functions[ruby-info] ))
+	if (( $+functions[ruby-info] ))
 	then
 		ruby-info
 	fi
