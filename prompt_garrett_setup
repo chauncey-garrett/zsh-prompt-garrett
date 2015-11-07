@@ -8,17 +8,17 @@
 # A prompt with the information you need the moment you need it.
 #
 # This prompt has the following features:
-#     * change prompt color when uid is root
-#     * change host color when on ssh
-#     * display full or truncated hostname on ssh
-#     * determine the number of background jobs
-#     * report the truncated present working directory
-#     * report return codes other than 0
-#     * report local time
-#     * report the terminal line number
-#     * report git status, git remote status, git prompt info and git SHA information
-#     * indicate vi-mode
-#     * notifications for commands taking longer than x time
+#     * Change prompt color when UID is root
+#     * Change host color when on ssh
+#     * Display full or truncated hostname on ssh
+#     * Determine the number of background jobs
+#     * Report the truncated present working directory
+#     * Report return codes other than 0
+#     * Report local time
+#     * Report the terminal line number
+#     * Report git status, git remote status, git prompt info and git SHA information
+#     * Indicate vi-mode
+#     * Notifications for commands taking longer than n time
 #
 # Features may be disabled and rearranged as desired by using the corresponding tokens.
 #
@@ -457,3 +457,4 @@ ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to 
 }
 
 prompt_garrett_setup "$@"
+
