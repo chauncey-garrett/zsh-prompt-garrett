@@ -123,7 +123,6 @@ function prompt_garrett_precmd_notification
 		then
 			notify-send "${prompt_garrett_preexec_cmd:-Unknown command}" "Required $prompt_garrett_precmd_time_elapsed s"
 		else
-		else
 			tput bel
 		fi
 	fi
