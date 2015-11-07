@@ -1,7 +1,9 @@
 #!/usr/bin/env zsh
 #
 # Garrett Zsh Theme for Prezto
-# Created with modified code by Chauncey Garrett
+# Created with modified code by Chauncey Garrett - @chauncey_io
+#
+# http://chauncey.io/projects/zsh-prompt-garrett/
 #
 # A prompt with the information you need the moment you need it.
 #
