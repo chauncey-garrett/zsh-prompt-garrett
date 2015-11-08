@@ -8,452 +8,454 @@
 # A prompt with the information you need the moment you need it.
 #
 # This prompt has the following features:
-#     * Change prompt color when UID is root
-#     * Change host color when on ssh
-#     * Display full or truncated hostname on ssh
-#     * Determine the number of background jobs
-#     * Report the truncated present working directory
-#     * Report return codes other than 0
-#     * Report local time
-#     * Report the terminal line number
-#     * Report git status, git remote status, git prompt info and git SHA information
-#     * Indicate vi-mode
-#     * Notifications for commands taking longer than n time
+#   - Change prompt color when UID is root
+#   - Change host color when on ssh
+#   - Display full or truncated hostname on ssh
+#   - Determine the number of background jobs
+#   - Report the truncated present working directory
+#   - Report return codes other than 0
+#   - Report local time
+#   - Report the terminal line number
+#   - Report git status, git remote status, git prompt info and git SHA information
+#   - Indicate vi-mode
+#   - Notifications for commands taking longer than n time
 #
 # Features may be disabled and rearranged as desired by using the corresponding tokens.
 #
 
-#
-# Load dependencies
-#
-
+# Load dependencies.
 pmodload 'helper'
 
-#
-# PROMPT | prompt_garrett_help
-#     - prompt configuration help
+# Prompt configuration help.
 # TODO not even remotely finished...
-#
+# function prompt_garrett_help() {
+# cat <<'EOF'
 
-# function prompt_garrett_help()
-# {
-	# cat <<'EOF'
 # This prompt is configurable via styles:
 
-	# Context: :prompt:garrett
+  # Context: :prompt:garrett
 
-	# Colors (red green yellow blue magenta cyan white grey):
-		# prompt_garrett_color_user   | The color for user@host. Defaults to 'green'
-		# root_color   | The color for the hostname for root. Defaults to 'red'
-		# prompt_garrett_color_prompt | The color for everything else. Defaults to ''
+  # Colors (red green yellow blue magenta cyan white grey):
+    # prompt_garrett_color_user     The color for user@host. Defaults to 'green'
+    # root_color                    The color for the hostname for root. Defaults to 'red'
+    # prompt_garrett_color_prompt   The color for everything else. Defaults to ''
 
-	# Path (path type - possible values):
-		# ratio - use COLUMNS/ratio to clip the path. Default.
-		# fixed - use a fixed maximum length.
-		# subdir - clip by number of subdirectories.
-		# full - show the full path
+  # Path (path type - possible values):
+    # ratio    Use COLUMNS/ratio to clip the path. Default.
+    # fixed    Use a fixed maximum length.
+    # subdir   Clip by number of subdirectories.
+    # full     Show the full path
 
-	# Path length styles:
-		# ratio  | the ratio for the 'ratio' path style, funnily enough. Defaults to 6.
-		# length | the maximum length for the 'fixed' path style. Defaults to 20.
-		# subdir | the number of subdirectories to show for the 'subdir' path style. Defaults to 3.
+  # Path length styles:
+    # ratio    The ratio for the 'ratio' path style, funnily enough. Defaults to 6.
+    # length   The maximum length for the 'fixed' path style. Defaults to 20.
+    # subdir   The number of subdirectories to show for the 'subdir' path style. Defaults to 3.
 
-	# You can set styles in the current terminal to test things out, values will be updated.
+  # You can set styles in the current terminal to test things out, values will be updated.
 
 # EOF
 # }
 
-#
-# PROMPT | Preview
-#     - display a preview of the prompt
-# TODO not ready
-#
+# Display a preview of the prompt.
+# TODO not ready.
+# function prompt_garrett_preview {
 
-# function prompt_garrett_preview
-# {
-	# if (( $# > 0 ))
-	# then
-		# prompt_preview_theme 'garrett' "$@"
-	# else
-		# prompt_preview_theme 'garrett' # red green blue
-	# fi
+  # Display the passed in parameters.
+  # if (( $> 0 )); then
+    # prompt_preview_theme 'garrett' "$@"
+
+  # Display the default settings.
+  # else
+    # prompt_preview_theme 'garrett' red green blue
+  # fi
 # }
 
-#
-# PROMPT | prompt_garrett_pwd
-#     - truncate the pwd display, if needed
-#
+# Truncate the PWD display, if needed.
+function prompt_garrett_pwd {
+  local pwd="${PWD/#$HOME/~}"
 
-function prompt_garrett_pwd
-{
-	local pwd="${PWD/#$HOME/~}"
+  # PWD will fit.
+  if [[ "$pwd" == (#m)[/~] ]]; then
+    prompt_garrett_current_dir="${prompt_garrett_color_pwd}$MATCH"
+    unset MATCH
 
-	if [[ "$pwd" == (#m)[/~] ]]
-	then # pwd will fit
-		prompt_garrett_current_dir="${prompt_garrett_color_pwd}$MATCH"
-		unset MATCH
-	else # pwd needs truncation
-		prompt_garrett_current_dir="${prompt_garrett_color_pwd}${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}/${pwd:t}"
-	fi
+  # PWD needs truncation.
+  else
+    prompt_garrett_current_dir="${prompt_garrett_color_pwd}${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}/${pwd:t}"
+  fi
 }
 
-#
-# Notifications
-#     - notify of command completion after n seconds has passed
-#
+# Notify of command completion after n seconds has passed.
+function prompt_garrett_precmd_notification {
 
-function prompt_garrett_precmd_notification
-{
-	# trigger a notification after n seconds have elapsed
-	prompt_garrett_delay_after_notification=1
+  # Trigger a notification after n seconds have elapsed.
+  prompt_garrett_delay_after_notification=1
 
-	# determine time elapsed
-	prompt_garrett_precmd_time_elapsed_start=${prompt_garrett_preexec_time:-$(date +'%s')}
-	prompt_garrett_precmd_time_elapsed_stop=$(date +'%s')
-	let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
+  # Determine time elapsed.
+  prompt_garrett_precmd_time_elapsed_start=${prompt_garrett_preexec_time:-$(date +'%s')}
+  prompt_garrett_precmd_time_elapsed_stop=$(date +'%s')
+  let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
 
-	# notify!
-	if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]
-	then # n seconds have passed, so notify!
-		if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] ))
-		then
-			terminal-notifier -title "${prompt_garrett_preexec_cmd:-Unknown command}" -message "Required $prompt_garrett_precmd_time_elapsed s" -sound Tink
-		elif [[ "$OSTYPE" == darwin* ]] && (( $+commands[growlnotify] ))
-		then
-			growlnotify -n "Terminal" -t "${prompt_garrett_preexec_cmd:-Unknown command}" -m "Required $prompt_garrett_precmd_time_elapsed s"
-		elif [[ "$OSTYPE" == linux-gnu ]] && (( $+commands[notify-send] ))
-		then
-			notify-send "${prompt_garrett_preexec_cmd:-Unknown command}" "Required $prompt_garrett_precmd_time_elapsed s"
-		else
-			tput bel
-		fi
-	fi
+  # n seconds have passed, so notify!
+  if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]; then
+
+    # On OS X, notify with terminal-notifier.
+    if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
+      terminal-notifier \
+        | -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
+        | -message "Required $prompt_garrett_precmd_time_elapsed s" \
+        | -sound Tink
+
+    # On OS X, notify with growlnotify.
+    elif [[ "$OSTYPE" == darwin* ]] && (( $+commands[growlnotify] )); then
+      growlnotify \
+        | -n "Terminal" \
+        | -t "${prompt_garrett_preexec_cmd:-Unknown command}" \
+        | -m "Required $prompt_garrett_precmd_time_elapsed s"
+
+    # On linux, notify with notify-send.
+    elif [[ "$OSTYPE" == linux-gnu ]] && (( $+commands[notify-send] )); then
+      notify-send \
+        | "${prompt_garrett_preexec_cmd:-Unknown command}" \
+        | "Required $prompt_garrett_precmd_time_elapsed s"
+
+    # Notify via tput.
+    else
+      tput bel
+    fi
+  fi
 }
 
-#
-# PROMPT | prompt_garrett_chpwd
-#    - a function which is executed whenever the directory is changed
-#
+# A function executed whenever the directory is changed.
+function prompt_garrett_chpwd {
 
-function prompt_garrett_chpwd
-{
-	# list the contents of the new directory
-	if is-callable 'dircolors';
-	then # GNU flavor ls
-		if zstyle -t ':prezto:module:utility:ls' color
-		then
-			ls --group-directories-first --color=auto
-		else
-			ls -F
-		fi
-	else # BSD flavor ls
-		if zstyle -t ':prezto:module:utility:ls' color
-		then
-			ls -G
-		else
-			ls -F
-		fi
-	fi
+  # List the contents of the new directory.
+  if is-callable 'dircolors'; then
+
+    # GNU flavor ls.
+    if zstyle -t ':prezto:module:utility:ls' color; then
+      ls --group-directories-first --color=auto
+    else
+      ls -F
+    fi
+  else
+
+    # BSD flavor ls.
+    if zstyle -t ':prezto:module:utility:ls' color; then
+      ls -G
+    else
+      ls -F
+    fi
+  fi
 }
 
-#
-# PROMPT | prompt_garrett_preexec
-#     - functions that are called before command execution
-#
+# Functions called before command execution.
+function prompt_garrett_preexec {
 
-function prompt_garrett_preexec
-{
-	# Define timer and cmd for notification
-	export prompt_garrett_preexec_time=$(date +'%s')
-	export prompt_garrett_preexec_cmd="\$ $1"
+  # Define timer and command for notification.
+  export prompt_garrett_preexec_time=$(date +'%s')
+  export prompt_garrett_preexec_cmd="\$ $1"
 
-	# Ensure terminal code isn't colored from prompt
-	print -n "$reset_color"
+  # Ensure terminal code isn't colored from prompt.
+  print -n "$reset_color"
 }
 
-#
-# PROMPT | prompt_garrett_precmd
-#     - functions that are called before each prompt is displayed
-#
+# Functions called before each prompt is displayed.
+function prompt_garrett_precmd {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
 
-function prompt_garrett_precmd
-{
-	setopt LOCAL_OPTIONS
-	unsetopt XTRACE KSH_ARRAYS
+  # Show number of background jobs.
+  prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
 
-	# Show number of background jobs
-	prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
+  # Format PWD.
+  prompt_garrett_pwd
 
-	# Format PWD
-	prompt_garrett_pwd
+  # Trigger a notification after x time has elapsed.
+  eval prompt_garrett_precmd_notification
 
-	# Trigger a notification after x time has elapsed
-	eval prompt_garrett_precmd_notification
+  # Get Ruby info.
+  if (( $+functions[ruby-info] )); then
+    ruby-info
+  fi
 
-	# Get ruby info
-	if (( $+functions[ruby-info] ))
-	then
-		ruby-info
-	fi
+  # Get Git repository info.
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
 
-	# Get git repository info
-	if (( $+functions[git-info] ))
-	then
-		git-info
-	fi
+  #
+  # Add a line to prompt for visibility.
+  #
 
-	#
-	# Add a line to prompt for visibility
-	#
+  # Determine the width.
+  local prompt_garrett_width_terminal
+  (( prompt_garrett_width_terminal= ${COLUMNS} - 1 ))
 
-	# Determine the width
-	local prompt_garrett_width_terminal
-	(( prompt_garrett_width_terminal= ${COLUMNS} - 1 ))
+  # Determine the length needed for prompt_garrett_space.
+  # NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work.
+  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
+  local zero='%([BSUbfksu]|([FB]|){*})'
+  local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
-	# Determine the length needed for prompt_garrett_space
-	# NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work
-	local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
-	local zero='%([BSUbfksu]|([FB]|){*})'
-	local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
+  # Calculate the padding.
+  local prompt_garrett_space_padding
+  (( prompt_garrett_space_padding= ${prompt_garrett_width_terminal} - ${prompt_garrett_width_line1} ))
 
-	# Calculate the padding
-	local prompt_garrett_space_padding
-	(( prompt_garrett_space_padding= ${prompt_garrett_width_terminal} - ${prompt_garrett_width_line1} ))
+  # Add the correct number of characters.
+  local prompt_space_character="${prompt_garrett_altchar_padding}"
+  eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
 
-	# Add the correct number of characters
-	local prompt_space_character="${prompt_garrett_altchar_padding}"
-	eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
-
-	# Prompt line 1
-	print
-	print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+  # Prompt line 1 (set above PROMPT, below).
+  print
+  print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
 }
 
-#
-# PROMPT | prompt_garrett_setup
-#    - finally, configure the prompt
-#
+# Configure the prompt.
+function prompt_garrett_setup {
 
-function prompt_garrett_setup
-{
-	# Load necessary modules
-	setopt LOCAL_OPTIONS
-	unsetopt XTRACE KSH_ARRAYS
-	prompt_opts=(cr percent subst)
+  # Load necessary modules.
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
 
-	# Add hooks for calling preexec, precmd & chpwd
-	autoload -Uz add-zsh-hook
-	add-zsh-hook preexec prompt_garrett_preexec
-	add-zsh-hook precmd prompt_garrett_precmd
-	add-zsh-hook chpwd prompt_garrett_chpwd
+  # Add hooks for calling preexec, precmd & chpwd.
+  autoload -Uz add-zsh-hook
+  add-zsh-hook preexec prompt_garrett_preexec
+  add-zsh-hook precmd prompt_garrett_precmd
+  add-zsh-hook chpwd prompt_garrett_chpwd
 
-	#
-	# Colors
-	#
+  #
+  # Colors
+  #
 
-	# Alias the colors
-	[[ -z $(functions colors) ]] && autoload -U colors && colors
+  # Alias the colors.
+  [[ -z $(functions colors) ]] && autoload -U colors && colors
+  for color in black red green yellow blue magenta cyan white grey; do
 
-	for color in black red green yellow blue magenta cyan white grey
-	do
-		eval $color='%F{${(L)color}}'
-		eval ${color}_bold='%B{${(L)color}}'
-	done
+    # Normal colors.
+    eval $color='%F{${(L)color}}'
 
-	# Color scheme
-	eval prompt_garrett_color_pwd=\$\{${2:-'${blue}'}\}
-	# eval prompt_garrett_color_pwd=${2:-'${blue}'}
-	eval prompt_garrett_color_line_number=${5:-'${magenta}'}
-	eval prompt_garrett_color_time=${6:-'${green}'}
-	eval prompt_garrett_color_git_branch=${7:-'${green}'}
-	eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
-	eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
+    # Bold colors.
+    eval ${color}_bold='%B{${(L)color}}'
+  done
 
-	# Determine prompt, user and host colors
-	if [[ "$EUID" = "0" ]] || [[ "$USER" = 'root' ]]
-	then # root user
+  # Color scheme.
+  eval prompt_garrett_color_pwd=\$\{${2:-'${blue}'}\}
+  # eval prompt_garrett_color_pwd=${2:-'${blue}'}
+  eval prompt_garrett_color_line_number=${5:-'${magenta}'}
+  eval prompt_garrett_color_time=${6:-'${green}'}
+  eval prompt_garrett_color_git_branch=${7:-'${green}'}
+  eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
+  eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
 
-		# set colors
-		eval prompt_garrett_color_user=${3:-'${red}'}
-		eval prompt_garrett_color_host=${3:-'${red}'}
-		eval prompt_garrett_color_prompt=${3:-'${red}'}
+  #
+  # Determine prompt, user and host colors.
+  #
 
-		# set style
-		eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
+  # Root user.
+  if [[ "$EUID" = "0" ]] || [[ "$USER" = 'root' ]]; then
 
-	elif [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]
-	then # on SSH
+    # Set colors.
+    eval prompt_garrett_color_user=${3:-'${red}'}
+    eval prompt_garrett_color_host=${3:-'${red}'}
+    eval prompt_garrett_color_prompt=${3:-'${red}'}
 
-		# set colors
-		eval prompt_garrett_color_user=${3:-'${green}'}
-		eval prompt_garrett_color_host=${3:-'${yellow}'}
-		eval prompt_garrett_color_prompt=${3:-'${yellow}'}
+    # Set style.
+    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
+    eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
-		# set style
-		eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
+  # On SSH.
+  elif [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
 
-	else # normal user
+    # Set colors.
+    eval prompt_garrett_color_user=${3:-'${green}'}
+    eval prompt_garrett_color_host=${3:-'${yellow}'}
+    eval prompt_garrett_color_prompt=${3:-'${yellow}'}
 
-		# set colors
-		eval prompt_garrett_color_user=${1:-'${green}'}
-		eval prompt_garrett_color_host=${1:-'${green}'}
-		eval prompt_garrett_color_prompt=${1:-'${grey}'}
+    # Set style.
+    eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
+    eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
-		# set style
-		eval prompt_garrett_user=''
-		eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-		eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
+  # Normal user.
+  else
 
-	fi
+    # Set colors.
+    eval prompt_garrett_color_user=${1:-'${green}'}
+    eval prompt_garrett_color_host=${1:-'${green}'}
+    eval prompt_garrett_color_prompt=${1:-'${grey}'}
 
-	#
-	# Report return code
-	#
+    # Set style.
+    eval prompt_garrett_user=''
+    eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
+    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
+  fi
 
-	eval prompt_garrett_return_code='%(?..${red}%? ⏎  ) '
+  #
+  # Report return code.
+  #
 
-	#
-	# Report local time
-	#
+  eval prompt_garrett_return_code='%(?..${red}%? ⏎  ) '
 
-	eval prompt_garrett_current_time='${green}%T'           # 24 hour time format
-	# eval prompt_garrett_current_time='${green}%*'           # 24 hour time format, second precise
-	# eval prompt_garrett_current_time='${green}%t'           # AM/PM time format
+  #
+  # Report local time.
+  #
 
-	# Keep the time updated
-	# TODO: figure out a better way to do this
-	# schedprompt()
-	# {
-		# emulate -L zsh
-		# zmodload -i zsh/sched
+  eval prompt_garrett_current_time='${green}%T'    # 24 hour time format
+  # eval prompt_garrett_current_time='${green}%*'    # 24 hour time format, second precise
+  # eval prompt_garrett_current_time='${green}%t'    # AM/PM time format
 
-		# # Remove existing event, so that multiple calls to "schedprompt" work OK (you could put one in precmd to push the timer 30 seconds into the future, for example.)
-		# integer i=${"${(@)zsh_scheduled_events#*:*:}"[(i)schedprompt]}
-		# (( i )) && sched -$i
+  # Keep the time updated.
+  # TODO: Figure out a better way to do this.
+  # function schedprompt() {
+    # emulate -L zsh
+    # zmodload -i zsh/sched
 
-		# # Test that zle is running before calling the widget (recommended to avoid error messages). Otherwise it updates on entry to zle, so there's no loss.
-		# zle && zle reset-prompt
+    # # Remove existing event, so that multiple calls to "schedprompt" work OK (you could put one in precmd to push the timer 30 seconds into the future, for example).
+    # integer i=${"${(@)zsh_scheduled_events#*:*:}"[(i)schedprompt]}
+    # (( i )) && sched -$i
 
-		# # This ensures we're not too far off the start of the minute
-		# sched +1 schedprompt
-	# }
-	# schedprompt
+    # # Test that zle is running before calling the widget (recommended to avoid error messages). Otherwise it updates on entry to zle, so there's no loss.
+    # zle && zle reset-prompt
 
-	#
-	# Report terminal line number
-	#
+    # # This ensures we're not too far off the start of the minute.
+    # sched +1 schedprompt
+  # }
+  # schedprompt
 
-	eval prompt_garrett_line_number='${green}+${magenta}%!'
+  #
+  # Report terminal line number.
+  #
 
-	#
-	# Report git info
-	# NOTE: listed in order in which the information will appear in the prompt
-	#
+  eval prompt_garrett_line_number='${green}+${magenta}%!'
 
-	# Git verbose data (commit counts, etc.)
-	# zstyle ':prezto:module:git:info' verbose 'yes'
+  #
+  # Report git info.
+  # NOTE: Listed in order in which the information will appear in the prompt.
+  #
 
-	# Git prompt info
-	zstyle ':prezto:module:git:info:branch'    format "${cyan} λ${prompt_garrett_color_prompt}:${green}%b"
-	zstyle ':prezto:module:git:info:remote'    format ""
-	zstyle ':prezto:module:git:info:action'    format "${yellow} %s"
-	zstyle ':prezto:module:git:info:position'  format "${red} %p"
+  # Git verbose data (commit counts, etc.)
+  # zstyle ':prezto:module:git:info' verbose 'yes'
 
-	# Git commit SHA
-	zstyle ':prezto:module:git:info:commit'    format "${yellow} %.7c"
+  # Git prompt info.
+  zstyle ':prezto:module:git:info:branch'    format "${cyan} λ${prompt_garrett_color_prompt}:${green}%b"
+  zstyle ':prezto:module:git:info:remote'    format ""
+  zstyle ':prezto:module:git:info:action'    format "${yellow} %s"
+  zstyle ':prezto:module:git:info:position'  format "${red} %p"
 
-	# Git remote status
-	zstyle ':prezto:module:git:info:behind'    format "${magenta} ⬇ "
-	zstyle ':prezto:module:git:info:ahead'     format "${magenta} ⬆ "
-	zstyle ':prezto:module:git:info:diverged'  format "${magenta} ⥮"
-	zstyle ':prezto:module:git:info:stashed'   format "${cyan} ✭"
+  # Git commit SHA.
+  zstyle ':prezto:module:git:info:commit'    format "${yellow} %.7c"
 
-	# Git local status
-	zstyle ':prezto:module:git:info:clean'     format ""
-	zstyle ':prezto:module:git:info:dirty'     format "${prompt_garrett_color_prompt} |"
-	zstyle ':prezto:module:git:info:added'     format "${green} ✚"
-	zstyle ':prezto:module:git:info:deleted'   format "${red} ✗"
-	zstyle ':prezto:module:git:info:modified'  format "${blue} ✱"
-	zstyle ':prezto:module:git:info:renamed'   format "${magenta} ➜"
-	zstyle ':prezto:module:git:info:unmerged'  format "${yellow} ═"
-	zstyle ':prezto:module:git:info:untracked' format "${white} ◼"
+  # Git remote status.
+  zstyle ':prezto:module:git:info:behind'    format "${magenta} ⬇ "
+  zstyle ':prezto:module:git:info:ahead'     format "${magenta} ⬆ "
+  zstyle ':prezto:module:git:info:diverged'  format "${magenta} ⥮"
+  zstyle ':prezto:module:git:info:stashed'   format "${cyan} ✭"
 
-	# Git prompt styles
-	zstyle ':prezto:module:git:info:keys' format \
-		'prompt_info'     "%b" \
-		'rprompt'         "%R" \
-		'local_status'    "%C%D%a%d%m%r%U%u" \
-		'remote_status'   "%B%A%S" \
-		'sha'             "%c" \
+  # Git local status.
+  zstyle ':prezto:module:git:info:clean'     format ""
+  zstyle ':prezto:module:git:info:dirty'     format "${prompt_garrett_color_prompt} |"
+  zstyle ':prezto:module:git:info:added'     format "${green} ✚"
+  zstyle ':prezto:module:git:info:deleted'   format "${red} ✗"
+  zstyle ':prezto:module:git:info:modified'  format "${blue} ✱"
+  zstyle ':prezto:module:git:info:renamed'   format "${magenta} ➜"
+  zstyle ':prezto:module:git:info:unmerged'  format "${yellow} ═"
+  zstyle ':prezto:module:git:info:untracked' format "${white} ◼"
 
-	#
-	# Report ruby version
-	#     %v | ruby version
-	#
+  # Git prompt styles.
+  zstyle ':prezto:module:git:info:keys' format \
+    'prompt_info'    "%b" \
+    'rprompt'        "%R" \
+    'local_status'   "%C%D%a%d%m%r%U%u" \
+    'remote_status'  "%B%A%S" \
+    'sha'            "%c" \
 
-	zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
+  #
+  # Report Ruby version.
+  #   %v | ruby version
+  #
 
-	#
-	# Vim mode indicator
-	#
+  zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
 
-	zstyle ':prezto:module:editor:info:keymap:primary'           format "${red}❱%(?.${prompt_garrett_color_prompt}.${red})❱❱ "
-	zstyle ':prezto:module:editor:info:keymap:alternate'         format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰ "
-	# zstyle ':prezto:module:editor:info:keymap:primary:insert'    format "${red}I "
-	zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
-	zstyle ':prezto:module:editor:info:completing'               format "${red}..."
+  #
+  # Command line editor info.
+  #
 
-	#
-	# Use the extended character set, if available
-	#
+  # Base style.
+  zstyle ':prezto:module:editor:info:keymap:primary' format "${red}❱%(?.${prompt_garrett_color_prompt}.${red})❱❱ "
 
-	typeset -A altchar
-	set -A altchar ${(s..)terminfo[acsc]}
-	prompt_garrett_altchar_enable="%{$terminfo[enacs]%}"
-	prompt_garrett_altchar_enter="%{$terminfo[smacs]%}"
-	prompt_garrett_altchar_leave="%{$terminfo[rmacs]%}"
-	prompt_garrett_altchar_padding=${altchar[q]:--}
-	prompt_garrett_upper_left_corner=${prompt_garrett_altchar_enter}${altchar[l]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
-	prompt_garrett_lower_left_corner=${prompt_garrett_altchar_enter}${altchar[m]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
-	prompt_garrett_upper_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[k]:--}${prompt_garrett_altchar_leave}
-	prompt_garrett_lower_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[j]:--}${prompt_garrett_altchar_leave}
+  # Vim insert mode.
+  # zstyle ':prezto:module:editor:info:keymap:primary:insert' format "${red}I "
 
-	#
-	# Finally!
-	#
-	#   PROMPT   | Left
-	#   RPROMPT  | Right
-	#   PROMPT2  | Continuation
-	#   PROMPT3  | Selection
-	#   PROMPT4  | Execution trace
-	#   SPROMPT  | Autocorrection
-	#   SUDO_PS1 | Backup root prompt
-	#
+  # Vim overwrite mode.
+  zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
 
-	if (( $SHLVL == 1 ))
-	then
-		export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}'
-	else
-		export PROMPT='${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}( ${cyan}$SHLVL ${prompt_garrett_color_prompt}) ${editor_info[keymap]}'
-	fi
+  # Vim normal (command) mode.
+  zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰ "
 
-	export RPROMPT='${editor_info[alternate]}${editor_info[overwrite]}${prompt_garrett_return_code}${prompt_garrett_number_jobs}${prompt_garrett_line_number} ${prompt_garrett_current_time} %(?.${prompt_garrett_color_prompt}.${red})❰${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
+  # Tab completion mode.
+  zstyle ':prezto:module:editor:info:completing' format "${red}..."
 
-	export PROMPT2='(%_) ${editor_info[keymap]}'
+  #
+  # Use the extended character set, if available.
+  #
 
-	export PROMPT3='
+  typeset -A altchar
+  set -A altchar ${(s..)terminfo[acsc]}
+
+  prompt_garrett_altchar_enable="%{$terminfo[enacs]%}"
+  prompt_garrett_altchar_enter="%{$terminfo[smacs]%}"
+  prompt_garrett_altchar_leave="%{$terminfo[rmacs]%}"
+
+  # Character used to draw line.
+  prompt_garrett_altchar_padding=${altchar[q]:--}
+
+  # Upper left corner: ┌
+  prompt_garrett_upper_left_corner=${prompt_garrett_altchar_enter}${altchar[l]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+
+  # Lower left corner: └
+  prompt_garrett_lower_left_corner=${prompt_garrett_altchar_enter}${altchar[m]:--}${altchar[q]:--}${prompt_garrett_altchar_leave}
+
+  # Upper right corner: ┐
+  prompt_garrett_upper_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[k]:--}${prompt_garrett_altchar_leave}
+
+  # Upper right corner: ┘
+  prompt_garrett_lower_right_corner=${prompt_garrett_altchar_enter}${altchar[q]:--}${altchar[j]:--}${prompt_garrett_altchar_leave}
+
+  #
+  # Print out the prompt.
+  #
+
+  # Left prompt; base shell level.
+  if (( $SHLVL == 1 )); then
+    export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}'
+
+  # Left prompt; nested shell level.
+  else
+    export PROMPT='${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}( ${cyan}$SHLVL ${prompt_garrett_color_prompt}) ${editor_info[keymap]}'
+  fi
+
+  # Right prompt.
+  export RPROMPT='${editor_info[alternate]}${editor_info[overwrite]}${prompt_garrett_return_code}${prompt_garrett_number_jobs}${prompt_garrett_line_number} ${prompt_garrett_current_time} %(?.${prompt_garrett_color_prompt}.${red})❰${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
+
+  # Continuation prompt.
+  export PROMPT2='(%_) ${editor_info[keymap]}'
+
+  # Selection prompt.
+  export PROMPT3='
 (?) ${editor_info[keymap]}'
 
-	export PROMPT4='${yellow}+${blue}%N ${green}@${magenta}%i ${reset_color}'
+  # Execution trace prompt.
+  export PROMPT4='${yellow}+${blue}%N ${green}@${magenta}%i ${reset_color}'
 
-	export SPROMPT='
+  # Autocorrection prompt.
+  export SPROMPT='
 ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
 
-	export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
+  # Backup root prompt for Bash.
+  export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
 }
 
 prompt_garrett_setup "$@"
