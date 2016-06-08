@@ -99,29 +99,37 @@ function prompt_garrett_precmd_notification {
   # n seconds have passed, so notify!
   if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]; then
 
-    # On OS X, notify with terminal-notifier.
-    if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
-      terminal-notifier \
-        -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
-        -message "Required $prompt_garrett_precmd_time_elapsed s" \
-        -sound Tink
-
-    # On OS X, notify with growlnotify.
-    elif [[ "$OSTYPE" == darwin* ]] && (( $+commands[growlnotify] )); then
-      growlnotify \
-        -n "Terminal" \
-        -t "${prompt_garrett_preexec_cmd:-Unknown command}" \
-        -m "Required $prompt_garrett_precmd_time_elapsed s"
-
-    # On linux, notify with notify-send.
-    elif [[ "$OSTYPE" == linux-gnu ]] && (( $+commands[notify-send] )); then
-      notify-send \
-        "${prompt_garrett_preexec_cmd:-Unknown command}" \
-        "Required $prompt_garrett_precmd_time_elapsed s"
-
-    # Notify via tput.
-    else
+    # Notify via tput while on ssh.
+    if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
       tput bel
+
+    # Use local notifications.
+    else
+
+      # On OS X, notify with terminal-notifier.
+      if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
+        terminal-notifier \
+          -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
+          -message "Required $prompt_garrett_precmd_time_elapsed s" \
+          -sound Tink
+
+      # On OS X, notify with growlnotify.
+      elif [[ "$OSTYPE" == darwin* ]] && (( $+commands[growlnotify] )); then
+        growlnotify \
+          -n "Terminal" \
+          -t "${prompt_garrett_preexec_cmd:-Unknown command}" \
+          -m "Required $prompt_garrett_precmd_time_elapsed s"
+
+      # On linux, notify with notify-send.
+      elif [[ "$OSTYPE" == linux-gnu ]] && (( $+commands[notify-send] )); then
+        notify-send \
+          "${prompt_garrett_preexec_cmd:-Unknown command}" \
+          "Required $prompt_garrett_precmd_time_elapsed s"
+
+      # Notify via tput.
+      else
+        tput bel
+      fi
     fi
   fi
 }
