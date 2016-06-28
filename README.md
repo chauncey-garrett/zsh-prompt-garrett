@@ -5,12 +5,12 @@
 **NEW: It's been a long time coming but I've finally added gifs so you can see
 what the fuss is all about!**
 
-I designed my prompt for readability and to present useful information when it
-is needed and to hide it otherwise.
+I designed my prompt for readability and to present useful information only when it
+is needed.
 
-The Garrett prompt supports line drawing, git information, ssh status,
-directory truncation, vi-editor info, the full range of prompt types (PS1-PS4,
-Autocorrection, and a backup SUDO_PS1), notification of background jobs,
+The Garrett prompt supports line drawing, `git` information, `ssh` status,
+directory truncation, vi-editor info, the full range of prompt types (`PS1`-`PS4`,
+`Autocorrection`, and a backup `SUDO_PS1`), notification of background jobs,
 non-zero return codes, and job completion, the current shell level and ruby
 version, history line number, and the current time.
 
@@ -43,8 +43,8 @@ Pro](http://on.chauncey.io/1GX4ZGU) (affiliate link).
 
 ### Right Prompt (RPROMPT)
 
-The right prompt is contains useful information but will be removed when long
-commands are typed.
+The right prompt contains useful information but is removed for long
+commands.
 
 ![](img/garrett-prompt-rprompt-removal.gif "rprompt removal")
 
@@ -54,7 +54,7 @@ commands are typed.
 
 ### Selection prompt (PS3)
 
-Note that his view contains both the selection *and* continuation prompts. The
+NOTE: This view contains both the selection *and* continuation prompts. The
 selection prompt is shown when entering 1, 2, or 3.
 
 ![](img/garrett-prompt-selection-prompt.gif "selection prompt")
@@ -91,8 +91,8 @@ prompt by editing the prompt file itself but that's up to you.
 You can display either the full or truncated hostname on ssh by editing the
 prompt file. The default is to display the truncated hostname.
 
-Note that all of the prompt goes from gray to orange—when making the gif, some
-of the color was lost.
+NOTE: The primary prompt color changes from gray to orange—color was lost when
+making the gif.
 
 ![](img/garrett-prompt-ssh-login.gif "color change when on ssh")
 
@@ -112,7 +112,7 @@ instead of orange.
 
 ### Present working directory truncation, if needed
 
-Directory truncation will slim down the $PWD to the first letter of each child
+Directory truncation will slim down the `PWD` to the first letter of each child
 directory; it can be turned off by editing the prompt file.
 
 ![](img/garrett-prompt-directory-truncation.gif "directory-truncation")
@@ -157,8 +157,7 @@ Useful for bang history completion and hipster pride.
 
 If you use the default Prezto, the prompt will also show the system's ruby.
 If you don't want to see that information, have a look at my [fork of
-Prezto](https://github.com/chauncey-garrett/zsh-prezto/blob/master/modules/ruby/
-functions/ruby-info).
+Prezto](https://github.com/chauncey-garrett/zsh-prezto/blob/master/modules/ruby/functions/ruby-info).
 
 ![](img/garrett-prompt-ruby-version.gif "ruby version")
 
@@ -181,6 +180,19 @@ If you like, you can add notification of insert mode by editing the prompt.
 ### Shell-level notification
 
 ![](img/garrett-prompt-prompt-shell-level.gif "shell level")
+
+## Helpful tips
+
+Here's several helpful suggestions and tips for ensuring the prompt
+works at its best.
+
+- Make sure you're using [Prezto](https://github.com/sorin-ionescu/prezto) - the prompt won't work without it!
+- Even better, use my [fork of Prezto](https://github.com/chauncey-garrett/zsh-prezto) which includes modifications (mentioned above) for a better experience
+- Add this keybinding to your `zshrc`; the default won't work as expected (see #5):
+
+```sh
+bindkey -s '^l' 'clear\n'
+```
 
 ## Like it?
 
