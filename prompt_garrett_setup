@@ -191,7 +191,7 @@ function prompt_garrett_precmd {
     unset perl_info
     typeset -gA perl_info
 
-    if (( $+commands[perl] )); then
+    if (( $+commands[perlbrew] )); then
       version="${${"$(perlbrew list)"##*\* perl-}%%
 *}"
     fi
@@ -213,7 +213,7 @@ function prompt_garrett_precmd {
     unset java_info
     typeset -gA java_info
 
-    if (( $+commands[java] )); then
+    if (( $+commands[jenv] )); then
       version="${${"$(jenv version)"##*-}%% *}"
     fi
 
@@ -234,7 +234,7 @@ function prompt_garrett_precmd {
     unset python_info
     typeset -gA python_info
 
-    if (( $+commands[python] )); then
+    if (( $+commands[pyenv] )); then
       version="${"$(pyenv version)"%% *}"
     fi
 
