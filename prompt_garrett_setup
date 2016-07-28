@@ -182,9 +182,93 @@ function prompt_garrett_precmd {
   # Trigger a notification after x time has elapsed.
   eval prompt_garrett_precmd_notification
 
+  perl-info() {
+    local version
+    local version_format
+    local version_formatted
+
+    # Clean up previous $perl_info.
+    unset perl_info
+    typeset -gA perl_info
+
+    if (( $+commands[perlbrew] )); then
+      version="${${"$(perlbrew list)"##*\* perl-}%%
+*}"
+    fi
+
+    # Format version.
+    if [[ -n "$version" ]]; then
+      zstyle -s ':prezto:module:perl:info:version' format 'version_format'
+      zformat -f version_formatted "$version_format" "v:$version"
+      perl_info[version]="${version_formatted}"
+    fi
+  }
+
+  java-info() {
+    local version
+    local version_format
+    local version_formatted
+
+    # Clean up previous $java_info.
+    unset java_info
+    typeset -gA java_info
+
+    if (( $+commands[jenv] )); then
+      version="${${"$(jenv version)"##*-}%% *}"
+    fi
+
+    # Format version.
+    if [[ -n "$version" ]]; then
+      zstyle -s ':prezto:module:java:info:version' format 'version_format'
+      zformat -f version_formatted "$version_format" "v:$version"
+      java_info[version]="${version_formatted}"
+    fi
+  }
+
+  python-info() {
+    local version
+    local version_format
+    local version_formatted
+
+    # Clean up previous $python_info.
+    unset python_info
+    typeset -gA python_info
+
+    if (( $+commands[pyenv] )); then
+      version="${"$(pyenv version)"%% *}"
+    fi
+
+    # Format version.
+    if [[ -n "$version" ]]; then
+      zstyle -s ':prezto:module:python:info:version' format 'version_format'
+      zformat -f version_formatted "$version_format" "v:$version"
+      python_info[version]="${version_formatted/Python }"
+    fi
+  }
+
   # Get Ruby info.
   if (( $+functions[ruby-info] )); then
     ruby-info
+  fi
+
+  # Get Python info.
+  if (( $+functions[python-info] )); then
+    python-info
+  fi
+
+  # Get Java info.
+  if (( $+functions[java-info] )); then
+    java-info
+  fi
+
+  # Get Perl info.
+  if (( $+functions[perl-info] )); then
+    perl-info
+  fi
+
+  # Get Node info.
+  if (( $+functions[node-info] )); then
+    node-info
   fi
 
   # Get Git repository info.
@@ -202,7 +286,7 @@ function prompt_garrett_precmd {
 
   # Determine the length needed for prompt_garrett_space.
   # NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work.
-  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
+  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${java_info[version]}${perl_info[version]}${python_info[version]}${ruby_info[version]/-/:}${node_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
   local zero='%([BSUbfksu]|([FB]|){*})'
   local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
@@ -216,7 +300,7 @@ function prompt_garrett_precmd {
 
   # Prompt line 1 (set above PROMPT, below).
   print
-  print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+  print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${java_info[version]}${perl_info[version]}${python_info[version]}${ruby_info[version]/-/:}${node_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
 }
 
 # Configure the prompt.
@@ -385,7 +469,35 @@ function prompt_garrett_setup {
   #   %v | ruby version
   #
 
-  zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
+  zstyle ':prezto:module:ruby:info:version' format "${yellow}%v "
+
+  #
+  # Report Python version.
+  #   %v | python version
+  #
+
+  zstyle ':prezto:module:python:info:version' format "${yellow}python:%v "
+
+  #
+  # Report Java version.
+  #   %v | java version
+  #
+
+  zstyle ':prezto:module:java:info:version' format "${yellow}java:%v "
+
+  #
+  # Report Perl version.
+  #   %v | perl version
+  #
+
+  zstyle ':prezto:module:perl:info:version' format "${yellow}perl:%v "
+
+  #
+  # Report Node version.
+  #   %v | node version
+  #
+
+  zstyle ':prezto:module:node:info:version' format "${yellow}node:%v "
 
   #
   # Command line editor info.
