@@ -134,6 +134,16 @@ function prompt_garrett_precmd_notification {
   fi
 }
 
+# Handle clearing the screen with ^L.
+function prompt_garrett_clear_screen() {
+
+  # Enable output to terminal.
+  zle -I
+
+  clear
+  prompt_garrett_preprompt_render
+}
+
 # A function executed whenever the directory is changed.
 function prompt_garrett_chpwd {
 
@@ -192,9 +202,11 @@ function prompt_garrett_precmd {
     git-info
   fi
 
-  #
-  # Add a line to prompt for visibility.
-  #
+  prompt_garrett_preprompt_render
+}
+
+# Add a line to prompt for visibility.
+function prompt_garrett_preprompt_render() {
 
   # Determine the width.
   local prompt_garrett_width_terminal
@@ -214,9 +226,8 @@ function prompt_garrett_precmd {
   local prompt_space_character="${prompt_garrett_altchar_padding}"
   eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
 
-  # Prompt line 1 (set above PROMPT, below).
-  print
-  print -P '${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+  # Newline + Prompt line 1 (set above PROMPT, below).
+  print -P '\n${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
 }
 
 # Configure the prompt.
@@ -256,6 +267,12 @@ function prompt_garrett_setup {
   eval prompt_garrett_color_git_branch=${7:-'${green}'}
   eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
   eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
+
+  # Override the default clear-screen so that ^L displays the prompt in its
+  # entirety.
+  if [[ $widgets[clear-screen] == 'builtin' ]]; then
+    zle -N clear-screen prompt_garrett_clear_screen
+  fi
 
   #
   # Determine prompt, user and host colors.
