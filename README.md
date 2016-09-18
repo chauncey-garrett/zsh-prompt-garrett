@@ -5,14 +5,24 @@
 **NEW: It's been a long time coming but I've finally added gifs so you can see
 what the fuss is all about!**
 
-I designed my prompt for readability and to present useful information only when it
-is needed.
+I designed my prompt for readability and to present useful information only when
+it is needed.
 
-The Garrett prompt supports line drawing, `git` information, `ssh` status,
-directory truncation, vi-editor info, the full range of prompt types (`PS1`-`PS4`,
-`Autocorrection`, and a backup `SUDO_PS1`), notification of background jobs,
-non-zero return codes, and job completion, the current shell level and ruby
-version, history line number, and the current time.
+The Garrett prompt supports:
+
+- `git` status information
+- All prompt types (`PS1`-`PS4`, `Autocorrection`, and a backup `SUDO_PS1`)
+- Notification of background jobs
+- Ruby version
+- Non-zero return codes
+- Line drawing
+- `ssh` status
+- Directory truncation
+- Vi-editor info
+- Job completion
+- Current shell level
+- History line number
+- The current time
 
 ## Prompt types
 
@@ -27,13 +37,13 @@ By using line drawing and inserting a newline between each command, scrolling
 back through your history for the output of a previous command becomes
 drastically easier.
 
-Terminal supports line drawing and the prompt will look it's best there.
+Both Terminal and iTerm2 support line drawing and the prompt will look it's best
+there.
 
 ![](img/garrett-prompt-terminal.gif "terminal prompt")
 
 The Garrett prompt does have a fallback if line drawing is unsupported by your
-terminal emulator. The following gif was taken in iTerm2, which doesn't seem to
-support line drawing. If you know how to get this to work, please open an issue.
+terminal emulator.
 
 ![](img/garrett-prompt-iterm.gif "iterm prompt")
 
@@ -92,7 +102,7 @@ You can display either the full or truncated hostname on ssh by editing the
 prompt file. The default is to display the truncated hostname.
 
 NOTE: The primary prompt color changes from gray to orange—color was lost when
-making the gif.
+making the gif (#1).
 
 ![](img/garrett-prompt-ssh-login.gif "color change when on ssh")
 
@@ -183,16 +193,18 @@ If you like, you can add notification of insert mode by editing the prompt.
 
 ## Helpful tips
 
-Here's several helpful suggestions and tips for ensuring the prompt
-works at its best.
+Here's several helpful suggestions and tips for ensuring the prompt works at its
+best.
 
-- Make sure you're using [Prezto](https://github.com/sorin-ionescu/prezto) - the prompt won't work without it!
-- Even better, use my [fork of Prezto](https://github.com/chauncey-garrett/zsh-prezto) which includes modifications (mentioned above) for a better experience
-- Add this keybinding to your `zshrc`; the default won't work as expected (see #5):
-
-```sh
-bindkey -s '^l' 'clear\n'
-```
+- Make sure you're using [Prezto](https://github.com/sorin-ionescu/prezto) with
+  the git module enabled - the prompt won't work without it (#6, #7)!
+- Even better, use my [fork of Prezto](https://github.com/chauncey-garrett/zsh-prezto)
+  which includes modifications (mentioned above) for a better experience
+- The Garrett prompt has a custom `clear-screen` widget so that `^L` will
+  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting),
+  [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search),
+  or [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions), be sure to
+  load those *after* you load the prompt in your [dotfiles](https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56).
 
 ## Like it?
 
