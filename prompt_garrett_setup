@@ -252,7 +252,7 @@ function prompt_garrett_setup {
 
   # Alias the colors.
   [[ -z $(functions colors) ]] && autoload -U colors && colors
-  for color in black red green yellow blue magenta cyan white grey; do
+  for color in red green yellow blue magenta cyan white grey; do
 
     # Normal colors.
     eval $color='%F{${(L)color}}'
@@ -264,11 +264,11 @@ function prompt_garrett_setup {
   # Color scheme.
   eval prompt_garrett_color_pwd=\$\{${2:-'${blue}'}\}
   # eval prompt_garrett_color_pwd=${2:-'${blue}'}
-  eval prompt_garrett_color_line_number=${5:-'${magenta}'}
-  eval prompt_garrett_color_time=${6:-'${green}'}
-  eval prompt_garrett_color_git_branch=${7:-'${green}'}
-  eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
-  eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
+  # eval prompt_garrett_color_line_number=${5:-'${magenta}'}
+  # eval prompt_garrett_color_time=${6:-'${green}'}
+  # eval prompt_garrett_color_git_branch=${7:-'${green}'}
+  # eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
+  # eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
 
   # Override the default clear-screen so that ^L displays the prompt in its
   # entirety.
