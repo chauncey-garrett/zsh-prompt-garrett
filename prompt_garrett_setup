@@ -108,10 +108,19 @@ function prompt_garrett_precmd_notification {
 
       # On OS X, notify with terminal-notifier.
       if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
-        terminal-notifier \
-          -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
-          -message "Required $prompt_garrett_precmd_time_elapsed s" \
-          -sound Tink
+
+        # Wrap with reattach-to-usernamespace to allow to work in TMUX.
+        if (( $+commands[reattach-to-user-namespace] )); then
+          reattach-to-user-namespace -l terminal-notifier \
+            -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
+            -message "Required $prompt_garrett_precmd_time_elapsed s" \
+            -sound Tink
+        else
+          terminal-notifier \
+            -title "${prompt_garrett_preexec_cmd:-Unknown command}" \
+            -message "Required $prompt_garrett_precmd_time_elapsed s" \
+            -sound Tink
+        fi
 
       # On linux, notify with notify-send.
       elif [[ "$OSTYPE" == linux-gnu ]] && (( $+commands[notify-send] )); then
