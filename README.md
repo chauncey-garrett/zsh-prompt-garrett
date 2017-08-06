@@ -2,11 +2,11 @@
 
 > A prompt with the information you need the moment you need it.
 
-**NEW: It's been a long time coming but I've finally added gifs so you can see
+**NEW: It's been a long time coming but I've added gifs so you can see
 what the fuss is all about!**
 
-I designed my prompt for readability and to present useful information only when
-it is needed.
+I designed my prompt for readability and to present useful information when
+needed.
 
 The Garrett prompt supports:
 
@@ -40,42 +40,41 @@ drastically easier.
 Both Terminal and iTerm2 support line drawing and the prompt will look it's best
 there.
 
-![](img/garrett-prompt-terminal.gif "terminal prompt")
+![][1]
 
-The Garrett prompt does have a fallback if line drawing is unsupported by your
+The Garrett prompt has a fallback if line drawing is unsupported by your
 terminal emulator.
 
-![](img/garrett-prompt-iterm.gif "iterm prompt")
+![][2]
 
-The terminal theme shown here is [Solarized
-Dark](http://ethanschoonover.com/solarized) and the font is [Pragmata
-Pro](http://on.chauncey.io/1GX4ZGU) (affiliate link).
+The terminal theme shown here is [Solarized Dark][3] and the font is [Pragmata
+Pro][4] (affiliate link).
 
 ### Right Prompt (RPROMPT)
 
-The right prompt contains useful information but is removed for long
-commands.
+![][5]
 
-![](img/garrett-prompt-rprompt-removal.gif "rprompt removal")
+The right prompt contains useful information but moves out of the way for long
+commands.
 
 ### Continuation prompt (PS2)
 
-![](img/garrett-prompt-continuation-prompt.gif "continuation prompt")
+![][6]
 
 ### Selection prompt (PS3)
+
+![][7]
 
 NOTE: This view contains both the selection *and* continuation prompts. The
 selection prompt is shown when entering 1, 2, or 3.
 
-![](img/garrett-prompt-selection-prompt.gif "selection prompt")
-
 ### Execution trace prompt (PS4)
 
-![](img/garrett-prompt-execution-trace-prompt.gif "execution trace prompt")
+![][8]
 
 ### Autocorrection prompt
 
-![](img/garrett-prompt-autocorrection-prompt.gif "autocorrection prompt")
+![][9]
 
 ### Backup root prompt
 
@@ -86,8 +85,8 @@ It's a simple safety measure.
 NOTE: This feature is available only when the shell environment is not reset by
 switching to the `sudo` command. *i.e.,* switch to root using `sudo -s` and you
 will see the prompt change its primary color to red (as described above); switch
-to root with `sudo -i`, the environment will be largely reset and you'll see the
-base zsh prompt instead of my custom one.
+to root with `sudo -i`, the environment will be reset and you'll see the base
+Zsh prompt instead of my custom one.
 
 ## Features
 
@@ -98,13 +97,13 @@ prompt by editing the prompt file itself but that's up to you.
 
 ### Change host color when on ssh
 
+![][10]
+
 You can display either the full or truncated hostname on ssh by editing the
 prompt file. The default is to display the truncated hostname.
 
 NOTE: The primary prompt color changes from gray to orange—color was lost when
 making the gif (#1).
-
-![](img/garrett-prompt-ssh-login.gif "color change when on ssh")
 
 ### Change prompt color when UID is root
 
@@ -114,22 +113,22 @@ instead of orange.
 
 ### ls the directory contents on cd
 
-![](img/garrett-prompt-chpwd.gif "ls the directory contents on cd")
+![][11]
 
 ### Determine the number of background jobs
 
-![](img/garrett-prompt-number-of-background-jobs.gif "number of background jobs")
+![][12]
 
 ### Present working directory truncation, if needed
+
+![][13]
 
 Directory truncation will slim down the `PWD` to the first letter of each child
 directory; it can be turned off by editing the prompt file.
 
-![](img/garrett-prompt-directory-truncation.gif "directory-truncation")
-
 ### Report non-zero return codes
 
-![](img/garrett-prompt-exit-code-status.gif "exit code status")
+![][14]
 
 ### Report local time
 
@@ -144,6 +143,8 @@ You can change to time format from within the prompt file. Available options:
 Useful for bang history completion and hipster pride.
 
 ### Report git status, git remote status, git prompt info and git SHA information
+
+![][15]
 
 | Symbol   | Meaning     |
 | :---:    | :---        |
@@ -161,66 +162,111 @@ Useful for bang history completion and hipster pride.
 | ═        | unmerged    |
 | ◼        | untracked   |
 
-![](img/garrett-prompt-git.gif "git status line")
+### Report Ruby version
 
-### Report the currently used ruby version
+![][16]
 
-If you use the default Prezto, the prompt will also show the system's ruby.
-If you don't want to see that information, have a look at my [fork of
-Prezto](https://github.com/chauncey-garrett/zsh-prezto/blob/master/modules/ruby/functions/ruby-info).
-
-![](img/garrett-prompt-ruby-version.gif "ruby version")
+If you use the default Prezto, the prompt will also show the system's ruby. If
+you don't want to see that information, have a look at my [fork of Prezto][17].
 
 ### Indicate vi-mode
 
 Normal mode:
 
-![](img/garrett-prompt-vim-normal-mode.gif "vim normal mode")
+![][18]
 
 Overwrite mode:
 
-![](img/garrett-prompt-vim-overwrite-mode.gif "vim overwrite mode")
+![][19]
 
 If you like, you can add notification of insert mode by editing the prompt.
 
 ### Notifications for commands taking longer than *n* seconds
 
-![](img/garrett-prompt-shell-notifications.gif "shell notifications")
+![][20]
+
+The default time is 2 seconds but is adjustable in the code.
 
 ### Shell-level notification
 
-![](img/garrett-prompt-prompt-shell-level.gif "shell level")
+![][21]
+
+`SHLVL` sets the shell-level notification value and increments by one each time
+a new shell starts. Common reasons the number can increase include:
+
+- `zsh` starts from within another shell, which could be `zsh`
+- A terminal multiplexer like `tmux` is in use
+
+## Installation
+
+- Copy `prompt_garrett_setup` to `~/.zprezto/modules/prompt/functions/`
+- Set `zstyle ':prezto:module:prompt' theme 'garrett'` in `~/.zpreztorc`
+- Open a new terminal window
+
+If you'd rather not have to do this, please provide your support on [Prezto #914][22].
 
 ## Helpful tips
 
-Here's several helpful suggestions and tips for ensuring the prompt works at its
+Here's helpful suggestions and tips for ensuring the prompt works at its
 best.
 
-- Make sure you're using [Prezto](https://github.com/sorin-ionescu/prezto) with
-  the git module enabled - the prompt won't work without it (#6, #7)!
-- Even better, use my [fork of Prezto](https://github.com/chauncey-garrett/zsh-prezto)
-  which includes modifications (mentioned above) for a better experience
+- Make sure you're using [Prezto][23] with the git module enabled - the prompt
+  won't work without it (#6, #7)!
+- Even better, use my [fork of Prezto][24] which includes modifications
+  (mentioned above) for a better experience
 - The Garrett prompt has a custom `clear-screen` widget so that `^L` will
-  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting](https://github.com/zsh-users/zsh-syntax-highlighting),
-  [zsh-history-substring-search](https://github.com/zsh-users/zsh-history-substring-search),
-  or [zsh-autosuggestions](https://github.com/zsh-users/zsh-autosuggestions), be sure to
-  load those *after* you load the prompt in your [dotfiles](https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56).
+  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting][25],
+  [zsh-history-substring-search][26], or [zsh-autosuggestions][27], be sure to
+  load those *after* you load the prompt in your [dotfiles][28].
 
 ## Like it?
 
 If you've found this project useful, would you consider sending your support?
 
-- [Contribute Feedback](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues) or a [Pull Request](https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls)
-- [Provide Support](http://chauncey.io/donate/)
-- [Give Bitcoin](https://www.coinbase.com/ChaunceyGarrett)
+- [Contribute Feedback][29]
+- [Submit a Pull Request][30]
+- [Donate][31]
 
 ## Author
 
-*The author of this module should be contacted via the [issue
-tracker](https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
-"chauncey-garrett/zsh-prompt-garrett/issues").*
+*The author of this module should be contacted via the [issue tracker][32].*
 
-| [![](http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g)](http://chauncey.io) |
-| :------------------------------------------------------------------------------------------------------: |
-| [Chauncey Garrett](http://chauncey.io) - [@chauncey_io](http://twitter.com/chauncey_io)                  |
+| [![][33]](http://chauncey.io) |
+| :--------------------: |
+| [Chauncey Garrett][34] |
 
+
+[1]: img/garrett-prompt-terminal.gif "terminal prompt"
+[2]: img/garrett-prompt-iterm.gif "iterm prompt"
+[3]: http://ethanschoonover.com/solarized
+[4]: https://www.myfonts.com/fonts/fsd/pragmata-pro/?refby=chauncey-io
+[5]: img/garrett-prompt-rprompt-removal.gif "rprompt removal"
+[6]: img/garrett-prompt-continuation-prompt.gif "continuation prompt"
+[7]: img/garrett-prompt-selection-prompt.gif "selection prompt"
+[8]: img/garrett-prompt-execution-trace-prompt.gif "execution trace prompt"
+[9]: img/garrett-prompt-autocorrection-prompt.gif "autocorrection prompt"
+[10]: img/garrett-prompt-ssh-login.gif "color change when on ssh"
+[11]: img/garrett-prompt-chpwd.gif "ls the directory contents on cd"
+[12]: img/garrett-prompt-number-of-background-jobs.gif "number of background jobs"
+[13]: img/garrett-prompt-directory-truncation.gif "directory-truncation"
+[14]: img/garrett-prompt-exit-code-status.gif "exit code status"
+[15]: img/garrett-prompt-git.gif "git status line"
+[16]: img/garrett-prompt-ruby-version.gif "ruby version"
+[17]: https://github.com/chauncey-garrett/zsh-prezto/blob/master/modules/ruby/functions/ruby-info
+[18]: img/garrett-prompt-vim-normal-mode.gif "vim normal mode"
+[19]: img/garrett-prompt-vim-overwrite-mode.gif "vim overwrite mode"
+[20]: img/garrett-prompt-shell-notifications.gif "shell notifications"
+[21]: img/garrett-prompt-prompt-shell-level.gif "shell level"
+[22]: https://github.com/sorin-ionescu/prezto/issues/914
+[23]: https://github.com/sorin-ionescu/prezto
+[24]: https://github.com/chauncey-garrett/zsh-prezto
+[25]: https://github.com/zsh-users/zsh-syntax-highlighting
+[26]: https://github.com/zsh-users/zsh-history-substring-search
+[27]: https://github.com/zsh-users/zsh-autosuggestions
+[28]: https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56
+[29]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
+[30]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls
+[31]: http://chauncey.io/donate/
+[32]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues"chauncey-garrett/zsh-prompt-garrett/issues"
+[33]: http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g
+[34]: http://chauncey.io
