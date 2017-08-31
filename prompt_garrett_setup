@@ -238,7 +238,7 @@ function prompt_garrett_setup {
   # Load necessary modules.
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
-  prompt_opts=(cr percent subst)
+  prompt_opts=(cr percent sp subst)
 
   # Add hooks for calling preexec, precmd & chpwd.
   autoload -Uz add-zsh-hook
