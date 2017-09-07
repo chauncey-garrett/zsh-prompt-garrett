@@ -70,21 +70,6 @@ pmodload 'helper'
   # fi
 # }
 
-# Truncate the PWD display, if needed.
-function prompt_garrett_pwd {
-  local pwd="${PWD/#$HOME/~}"
-
-  # PWD will fit.
-  if [[ "$pwd" == (#m)[/~] ]]; then
-    prompt_garrett_current_dir="${prompt_garrett_color_pwd}$MATCH"
-    unset MATCH
-
-  # PWD needs truncation.
-  else
-    prompt_garrett_current_dir="${prompt_garrett_color_pwd}${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}/${pwd:t}"
-  fi
-}
-
 # Notify of command completion after n seconds has passed.
 function prompt_garrett_precmd_notification {
 
@@ -189,7 +174,7 @@ function prompt_garrett_precmd {
   prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
 
   # Format PWD.
-  prompt_garrett_pwd
+  prompt_garrett_pwd="${prompt_garrett_color_pwd}$(prompt-pwd)"
 
   # Trigger a notification after x time has elapsed.
   eval prompt_garrett_precmd_notification
@@ -216,7 +201,7 @@ function prompt_garrett_preprompt_render() {
 
   # Determine the length needed for prompt_garrett_space.
   # NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work.
-  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
+  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
   local zero='%([BSUbfksu]|([FB]|){*})'
   local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
@@ -229,7 +214,7 @@ function prompt_garrett_preprompt_render() {
   eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
 
   # Newline + Prompt line 1 (set above PROMPT, below).
-  print -P '\n${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_current_dir}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+  print -P '\n${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
 }
 
 # Configure the prompt.

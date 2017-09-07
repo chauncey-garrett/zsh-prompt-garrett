@@ -199,41 +199,43 @@ a new shell starts. Common reasons the number can increase include:
 
 ## Installation
 
+- Have a working installation of [Prezto][22]
 - Copy `prompt_garrett_setup` to `~/.zprezto/modules/prompt/functions/`
 - Set `zstyle ':prezto:module:prompt' theme 'garrett'` in `~/.zpreztorc`
+- Optionally, configure [pwd trunctation][23]
 - Open a new terminal window
 
-If you'd rather not have to do this, please provide your support on [Prezto #914][22].
+If you'd rather not have to do this, please provide your support on [Prezto #914][24].
 
 ## Helpful tips
 
 Here's helpful suggestions and tips for ensuring the prompt works at its
 best.
 
-- Make sure you're using [Prezto][23] with the git module enabled - the prompt
-  won't work without it (#6, #7)!
-- Even better, use my [fork of Prezto][24] which includes modifications
+- Make sure you're using [Prezto][25] with the git module enabled - the prompt
+  won't work without it (see [#6][26], [#7][27])!
+- Even better, use my [fork of Prezto][28] which includes modifications
   (mentioned above) for a better experience
 - The Garrett prompt has a custom `clear-screen` widget so that `^L` will
-  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting][25],
-  [zsh-history-substring-search][26], or [zsh-autosuggestions][27], be sure to
-  load those *after* you load the prompt in your [dotfiles][28].
+  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting][29],
+  [zsh-history-substring-search][30], or [zsh-autosuggestions][31], be sure to
+  load those *after* you load the prompt in your [dotfiles][32].
 
 ## Like it?
 
 If you've found this project useful, would you consider sending your support?
 
-- [Contribute Feedback][29]
-- [Submit a Pull Request][30]
-- [Donate][31]
+- [Contribute Feedback][33]
+- [Submit a Pull Request][34]
+- [Donate][35]
 
 ## Author
 
-*The author of this module should be contacted via the [issue tracker][32].*
+*The author of this module should be contacted via the [issue tracker][36].*
 
-| [![][33]](http://chauncey.io) |
+| [![][37]](http://chauncey.io) |
 | :--------------------: |
-| [Chauncey Garrett][34] |
+| [Chauncey Garrett][38] |
 
 
 [1]: img/garrett-prompt-terminal.gif "terminal prompt"
@@ -257,16 +259,20 @@ If you've found this project useful, would you consider sending your support?
 [19]: img/garrett-prompt-vim-overwrite-mode.gif "vim overwrite mode"
 [20]: img/garrett-prompt-shell-notifications.gif "shell notifications"
 [21]: img/garrett-prompt-prompt-shell-level.gif "shell level"
-[22]: https://github.com/sorin-ionescu/prezto/issues/914
-[23]: https://github.com/sorin-ionescu/prezto
-[24]: https://github.com/chauncey-garrett/zsh-prezto
-[25]: https://github.com/zsh-users/zsh-syntax-highlighting
-[26]: https://github.com/zsh-users/zsh-history-substring-search
-[27]: https://github.com/zsh-users/zsh-autosuggestions
-[28]: https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56
-[29]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
-[30]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls
-[31]: http://chauncey.io/donate/
-[32]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues"chauncey-garrett/zsh-prompt-garrett/issues"
-[33]: http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g
-[34]: http://chauncey.io
+[22]: https://github.com/sorin-ionescu/prezto
+[23]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#prompt-display-length
+[24]: https://github.com/sorin-ionescu/prezto/issues/914
+[25]: https://github.com/sorin-ionescu/prezto
+[26]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/6
+[27]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/7)
+[28]: https://github.com/chauncey-garrett/zsh-prezto
+[29]: https://github.com/zsh-users/zsh-syntax-highlighting
+[30]: https://github.com/zsh-users/zsh-history-substring-search
+[31]: https://github.com/zsh-users/zsh-autosuggestions
+[32]: https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56
+[33]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
+[34]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls
+[35]: http://chauncey.io/donate/
+[36]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues"chauncey-garrett/zsh-prompt-garrett/issues"
+[37]: http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g
+[38]: http://chauncey.io
