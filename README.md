@@ -264,7 +264,7 @@ If you've found this project useful, would you consider sending your support?
 [24]: https://github.com/sorin-ionescu/prezto/issues/914
 [25]: https://github.com/sorin-ionescu/prezto
 [26]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/6
-[27]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/7)
+[27]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/7
 [28]: https://github.com/chauncey-garrett/zsh-prezto
 [29]: https://github.com/zsh-users/zsh-syntax-highlighting
 [30]: https://github.com/zsh-users/zsh-history-substring-search
