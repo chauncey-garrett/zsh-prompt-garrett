@@ -23,6 +23,11 @@
 # Features may be disabled and rearranged as desired by using the corresponding tokens.
 #
 
+# Backup root prompt for Bash.
+if (( ! ${+SUDO_PS1} )); then
+  export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
+fi
+
 # Load dependencies.
 pmodload 'helper'
 zmodload -i zsh/datetime
@@ -465,9 +470,6 @@ function prompt_garrett_setup {
   # Autocorrection prompt.
   export SPROMPT='
 ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
-
-  # Backup root prompt for Bash.
-  export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
 }
 
 prompt_garrett_setup "$@"
