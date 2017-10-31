@@ -25,6 +25,7 @@
 
 # Load dependencies.
 pmodload 'helper'
+zmodload -i zsh/datetime
 
 # Prompt configuration help.
 # TODO not even remotely finished...
@@ -74,11 +75,11 @@ pmodload 'helper'
 function prompt_garrett_precmd_notification {
 
   # Trigger a notification after n seconds have elapsed.
-  prompt_garrett_delay_after_notification=1
+  prompt_garrett_delay_after_notification=2
 
   # Determine time elapsed.
-  prompt_garrett_precmd_time_elapsed_start=${prompt_garrett_preexec_time:-$(date +'%s')}
-  prompt_garrett_precmd_time_elapsed_stop=$(date +'%s')
+  prompt_garrett_precmd_time_elapsed_start=${prompt_garrett_preexec_time:-$EPOCHSECONDS}
+  prompt_garrett_precmd_time_elapsed_stop=$EPOCHSECONDS
   let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
 
   # n seconds have passed, so notify!
@@ -158,7 +159,7 @@ function prompt_garrett_chpwd {
 function prompt_garrett_preexec {
 
   # Define timer and command for notification.
-  export prompt_garrett_preexec_time=$(date +'%s')
+  export prompt_garrett_preexec_time=$EPOCHSECONDS
   export prompt_garrett_preexec_cmd="\$ $1"
 
   # Ensure terminal code isn't colored from prompt.
