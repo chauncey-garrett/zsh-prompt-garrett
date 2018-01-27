@@ -190,6 +190,11 @@ function prompt_garrett_precmd {
     git-info
   fi
 
+  # Get virtualenv info.
+  if (( $+functions[python-info] )); then
+    python-info
+  fi
+
   prompt_garrett_preprompt_render
 }
 
@@ -411,6 +416,9 @@ function prompt_garrett_setup {
   # Tab completion mode.
   zstyle ':prezto:module:editor:info:completing' format "${red}..."
 
+  # %v - virtualenv name.
+  zstyle ':prezto:module:python:info:virtualenv' format "(virtualenv:${red}%v${white}) "
+
   #
   # Use the extended character set, if available.
   #
@@ -451,7 +459,7 @@ function prompt_garrett_setup {
   fi
 
   # Right prompt.
-  export RPROMPT='${editor_info[alternate]}${editor_info[overwrite]}${prompt_garrett_return_code}${prompt_garrett_number_jobs}${prompt_garrett_line_number} ${prompt_garrett_current_time} %(?.${prompt_garrett_color_prompt}.${red})❰${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
+  export RPROMPT='${python_info[virtualenv]}${editor_info[alternate]}${editor_info[overwrite]}${prompt_garrett_return_code}${prompt_garrett_number_jobs}${prompt_garrett_line_number} ${prompt_garrett_current_time} %(?.${prompt_garrett_color_prompt}.${red})❰${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
 
   # Continuation prompt.
   export PROMPT2='(%_) ${editor_info[keymap]}'
