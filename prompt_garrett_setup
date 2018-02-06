@@ -88,7 +88,7 @@ function prompt_garrett_precmd_notification {
   let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
 
   # n seconds have passed, so notify!
-  if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]; then
+  if [[ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]]; then
 
     # Notify via tput while on ssh.
     if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
