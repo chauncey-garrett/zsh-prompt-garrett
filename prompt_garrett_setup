@@ -97,7 +97,7 @@ function prompt_garrett_precmd_notification {
     # Use local notifications.
     else
 
-      # On OS X, notify with terminal-notifier.
+      # On macOS, notify with terminal-notifier.
       if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
 
         # Wrap with reattach-to-usernamespace to allow to work in TMUX.
@@ -140,7 +140,11 @@ function prompt_garrett_clear_screen() {
 # A function executed whenever the directory is changed.
 function prompt_garrett_chpwd {
 
+  #
   # List the contents of the new directory.
+  #
+
+  # Check for dircolors
   if is-callable 'dircolors'; then
 
     # GNU flavor ls.
@@ -149,6 +153,7 @@ function prompt_garrett_chpwd {
     else
       ls -F
     fi
+
   else
 
     # BSD flavor ls.
