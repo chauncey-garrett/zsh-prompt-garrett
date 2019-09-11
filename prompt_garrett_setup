@@ -231,6 +231,9 @@ function prompt_garrett_setup {
   add-zsh-hook preexec prompt_garrett_preexec
   add-zsh-hook precmd prompt_garrett_precmd
   add-zsh-hook chpwd prompt_garrett_chpwd
+  
+  # Tell prezto we can manage this prompt
+  zstyle ':prezto:module:prompt' managed 'yes'
 
   #
   # Colors
