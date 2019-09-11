@@ -122,14 +122,14 @@ instead of orange.
 ![][13]
 
 Directory truncation will slim down the `PWD` to the first letter of each child
-directory; it can be turned off by editing the prompt file.
+directory. This is [configurable][14] via Prezto.
 
 ### Report non-zero return codes
 
-![][14]
+![][15]
 
 Support for non-zero return codes must be enabled. See
-Prezto's prompt [documentation][15].
+Prezto's prompt [documentation][16].
 
 ### Report local time
 
@@ -145,7 +145,7 @@ Useful for bang history completion and hipster pride.
 
 ### Report git status, git remote status, git prompt info and git SHA information
 
-![][16]
+![][17]
 
 | Symbol   | Meaning     |
 | :---:    | :---        |
@@ -167,59 +167,59 @@ Useful for bang history completion and hipster pride.
 
 Normal mode:
 
-![][17]
+![][18]
 
 Overwrite mode:
 
-![][18]
+![][19]
 
 If you like, you can add notification of insert mode by editing the prompt.
 
 ### Notifications for commands taking longer than *n* seconds
 
-![][19]
+![][20]
 
 The default time is 2 seconds but is adjustable in the code.
 
 ## Installation
 
-- Have a working installation of [Prezto][20]
+- Have a working installation of [Prezto][21]
 - Copy `prompt_garrett_setup` to `~/.zprezto/modules/prompt/functions/`
 - Set `zstyle ':prezto:module:prompt' theme 'garrett'` in `~/.zpreztorc`
-- Optionally, configure [pwd trunctation][21]
+- Optionally, configure [pwd trunctation][22]
 - Open a new terminal window
 
-If you'd rather not have to do this, please provide your support on [Prezto #914][22].
+If you'd rather not have to do this, please provide your support on [Prezto #914][23].
 
 ## Helpful tips
 
 Here's helpful suggestions and tips for ensuring the prompt works at its
 best.
 
-- Make sure you're using [Prezto][23] with the git module enabled - the prompt
-  won't work without it (see [#6][24], [#7][25])!
-- Even better, use my [fork of Prezto][26] which includes modifications
+- Make sure you're using [Prezto][24] with the git module enabled - the prompt
+  won't work without it (see [#6][25], [#7][26])!
+- Even better, use my [fork of Prezto][27] which includes modifications
   (mentioned above) for a better experience
 - The Garrett prompt has a custom `clear-screen` widget so that `^L` will
-  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting][27],
-  [zsh-history-substring-search][28], or [zsh-autosuggestions][29], be sure to
-  load those *after* you load the prompt in your [dotfiles][30].
+  properly redraw the prompt (#5). If you use [zsh-syntax-highlighting][28],
+  [zsh-history-substring-search][29], or [zsh-autosuggestions][30], be sure to
+  load those *after* you load the prompt in your [dotfiles][31].
 
 ## Like it?
 
 If you've found this project useful, would you consider sending your support?
 
-- [Contribute Feedback][31]
-- [Submit a Pull Request][32]
-- [Donate][33]
+- [Contribute Feedback][32]
+- [Submit a Pull Request][33]
+- [Donate][34]
 
 ## Author
 
-*The author of this module should be contacted via the [issue tracker][34].*
+*The author of this module should be contacted via the [issue tracker][35].*
 
-| [![][35]](http://chauncey.io) |
+| [![][36]](http://chauncey.io) |
 | :--------------------: |
-| [Chauncey Garrett][36] |
+| [Chauncey Garrett][37] |
 
 
 [1]: img/garrett-prompt-terminal.gif "terminal prompt"
@@ -235,26 +235,27 @@ If you've found this project useful, would you consider sending your support?
 [11]: img/garrett-prompt-chpwd.gif "ls the directory contents on cd"
 [12]: img/garrett-prompt-number-of-background-jobs.gif "number of background jobs"
 [13]: img/garrett-prompt-directory-truncation.gif "directory-truncation"
-[14]: img/garrett-prompt-exit-code-status.gif "exit code status"
-[15]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#display-return-value
-[16]: img/garrett-prompt-git.gif "git status line"
-[17]: img/garrett-prompt-vim-normal-mode.gif "vim normal mode"
-[18]: img/garrett-prompt-vim-overwrite-mode.gif "vim overwrite mode"
-[19]: img/garrett-prompt-shell-notifications.gif "shell notifications"
-[20]: https://github.com/sorin-ionescu/prezto
-[21]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#prompt-display-length
-[22]: https://github.com/sorin-ionescu/prezto/issues/914
-[23]: https://github.com/sorin-ionescu/prezto
-[24]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/6
-[25]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/7
-[26]: https://github.com/chauncey-garrett/zsh-prezto
-[27]: https://github.com/zsh-users/zsh-syntax-highlighting
-[28]: https://github.com/zsh-users/zsh-history-substring-search
-[29]: https://github.com/zsh-users/zsh-autosuggestions
-[30]: https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56
-[31]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
-[32]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls
-[33]: http://chauncey.io/donate/
-[34]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues"chauncey-garrett/zsh-prompt-garrett/issues"
-[35]: http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g
-[36]: http://chauncey.io
+[14]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#prompt-display-length
+[15]: img/garrett-prompt-exit-code-status.gif "exit code status"
+[16]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#display-return-value
+[17]: img/garrett-prompt-git.gif "git status line"
+[18]: img/garrett-prompt-vim-normal-mode.gif "vim normal mode"
+[19]: img/garrett-prompt-vim-overwrite-mode.gif "vim overwrite mode"
+[20]: img/garrett-prompt-shell-notifications.gif "shell notifications"
+[21]: https://github.com/sorin-ionescu/prezto
+[22]: https://github.com/sorin-ionescu/prezto/tree/master/modules/prompt#prompt-display-length
+[23]: https://github.com/sorin-ionescu/prezto/issues/914
+[24]: https://github.com/sorin-ionescu/prezto
+[25]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/6
+[26]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues/7
+[27]: https://github.com/chauncey-garrett/zsh-prezto
+[28]: https://github.com/zsh-users/zsh-syntax-highlighting
+[29]: https://github.com/zsh-users/zsh-history-substring-search
+[30]: https://github.com/zsh-users/zsh-autosuggestions
+[31]: https://github.com/chauncey-garrett/dotfiles/blob/master/zsh/zpreztorc#L24-L56
+[32]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues
+[33]: https://github.com/chauncey-garrett/zsh-prompt-garrett/pulls
+[34]: http://chauncey.io/donate/
+[35]: https://github.com/chauncey-garrett/zsh-prompt-garrett/issues"chauncey-garrett/zsh-prompt-garrett/issues"
+[36]: http://www.gravatar.com/avatar/81e1334c20c8dc25dbf3fee88dc1879c.jpg?s=150&r=g
+[37]: http://chauncey.io
