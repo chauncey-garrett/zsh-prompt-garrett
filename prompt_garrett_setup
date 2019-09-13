@@ -23,6 +23,11 @@
 # Features may be disabled and rearranged as desired by using the corresponding tokens.
 #
 
+# Backup root prompt for Bash.
+if (( ! ${+SUDO_PS1} )); then
+  export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
+fi
+
 # Load dependencies.
 pmodload 'helper'
 zmodload -i zsh/datetime
@@ -83,7 +88,7 @@ function prompt_garrett_precmd_notification {
   let prompt_garrett_precmd_time_elapsed=$prompt_garrett_precmd_time_elapsed_stop-$prompt_garrett_precmd_time_elapsed_start
 
   # n seconds have passed, so notify!
-  if [ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]; then
+  if [[ $prompt_garrett_precmd_time_elapsed -gt $prompt_garrett_delay_after_notification ]]; then
 
     # Notify via tput while on ssh.
     if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
@@ -92,7 +97,7 @@ function prompt_garrett_precmd_notification {
     # Use local notifications.
     else
 
-      # On OS X, notify with terminal-notifier.
+      # On macOS, notify with terminal-notifier.
       if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
 
         # Wrap with reattach-to-usernamespace to allow to work in TMUX.
@@ -135,7 +140,11 @@ function prompt_garrett_clear_screen() {
 # A function executed whenever the directory is changed.
 function prompt_garrett_chpwd {
 
+  #
   # List the contents of the new directory.
+  #
+
+  # Check for dircolors
   if is-callable 'dircolors'; then
 
     # GNU flavor ls.
@@ -144,6 +153,7 @@ function prompt_garrett_chpwd {
     else
       ls -F
     fi
+
   else
 
     # BSD flavor ls.
@@ -180,11 +190,6 @@ function prompt_garrett_precmd {
   # Trigger a notification after x time has elapsed.
   eval prompt_garrett_precmd_notification
 
-  # Get Ruby info.
-  if (( $+functions[ruby-info] )); then
-    ruby-info
-  fi
-
   # Get Git repository info.
   if (( $+functions[git-info] )); then
     git-info
@@ -196,13 +201,20 @@ function prompt_garrett_precmd {
 # Add a line to prompt for visibility.
 function prompt_garrett_preprompt_render() {
 
+  #
+  # Report local time.
+  #
+
+  # 24 hour time format
+  prompt_garrett_current_time="${green}$(date '+%l:%M %p')"
+
   # Determine the width.
   local prompt_garrett_width_terminal
-  (( prompt_garrett_width_terminal= ${COLUMNS} - 1 ))
+  (( prompt_garrett_width_terminal = ${COLUMNS} - 1 ))
 
   # Determine the length needed for prompt_garrett_space.
   # NOTE: Be sure not to include the ${(e)prompt_garrett_space} portion or it won't work.
-  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${ruby_info[version]}${prompt_garrett_location} )${prompt_garrett_upper_right_corner}"
+  local prompt_line1="${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} )( ${prompt_garrett_location} ${prompt_garrett_line_number} ${prompt_garrett_current_time} )${prompt_garrett_upper_right_corner}"
   local zero='%([BSUbfksu]|([FB]|){*})'
   local prompt_garrett_width_line1=${#${(S%%)prompt_line1//$~zero/}}
 
@@ -215,7 +227,7 @@ function prompt_garrett_preprompt_render() {
   eval prompt_garrett_space="${prompt_garrett_color_prompt}\${(l.${prompt_garrett_space_padding}..${prompt_space_character}.)}"
 
   # Newline + Prompt line 1 (set above PROMPT, below).
-  print -P '\n${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${ruby_info[version]}${prompt_garrett_location}${prompt_garrett_color_prompt} )${prompt_garrett_upper_right_corner}'
+  print -P '\n${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_upper_left_corner}( ${prompt_garrett_pwd}${git_info[remote_status]}${git_info[prompt_info]}${git_info[local_status]}${git_info[sha]} ${prompt_garrett_color_prompt})${prompt_garrett_altchar_enter}${(e)prompt_garrett_space}${prompt_garrett_altchar_leave}( ${prompt_garrett_location} ${prompt_garrett_line_number} ${prompt_garrett_current_time} ${prompt_garrett_color_prompt})${prompt_garrett_upper_right_corner}'
 }
 
 # Configure the prompt.
@@ -257,7 +269,6 @@ function prompt_garrett_setup {
   # eval prompt_garrett_color_time=${6:-'${green}'}
   # eval prompt_garrett_color_git_branch=${7:-'${green}'}
   # eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
-  # eval prompt_garrett_color_ruby_version=${8:-'${yellow}'}
 
   # Override the default clear-screen so that ^L displays the prompt in its
   # entirety.
@@ -280,7 +291,6 @@ function prompt_garrett_setup {
     # Set style.
     eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
     eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
   # On SSH.
   elif [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
@@ -293,7 +303,6 @@ function prompt_garrett_setup {
     # Set style.
     eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
     eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
   # Normal user.
   else
@@ -306,22 +315,20 @@ function prompt_garrett_setup {
     # Set style.
     eval prompt_garrett_user=''
     eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
-    eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
   fi
+
+  eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
 
   #
   # Report return code.
   #
 
-  eval prompt_garrett_return_code='%(?..${red}%? ⏎  ) '
+  if zstyle -T ':prezto:module:prompt' show-return-val; then
+    eval prompt_garrett_return_code='%(?..${red}%? ⏎  ) '
 
-  #
-  # Report local time.
-  #
-
-  eval prompt_garrett_current_time='${green}%T'    # 24 hour time format
-  # eval prompt_garrett_current_time='${green}%*'    # 24 hour time format, second precise
-  # eval prompt_garrett_current_time='${green}%t'    # AM/PM time format
+  else
+    unset prompt_garrett_return_code
+  fi
 
   # Keep the time updated.
   # TODO: Figure out a better way to do this.
@@ -389,27 +396,30 @@ function prompt_garrett_setup {
     'sha'            "%c" \
 
   #
-  # Report Ruby version.
-  #   %v | ruby version
-  #
-
-  zstyle ':prezto:module:ruby:info:version' format "${yellow}ruby:%v "
-
-  #
   # Command line editor info.
   #
 
   # Base style.
-  zstyle ':prezto:module:editor:info:keymap:primary' format "${red}❱%(?.${prompt_garrett_color_prompt}.${red})❱❱ "
+  if zstyle -T ':prezto:module:prompt' show-return-val; then
+    zstyle ':prezto:module:editor:info:keymap:primary' format "%(?.${prompt_garrett_color_prompt}.${red})❱❱${red}❱"
+
+  else
+    zstyle ':prezto:module:editor:info:keymap:primary' format "${prompt_garrett_color_prompt}❱❱${red}❱"
+  fi
 
   # Vim insert mode.
-  # zstyle ':prezto:module:editor:info:keymap:primary:insert' format "${red}I "
+  zstyle ':prezto:module:editor:info:keymap:primary:insert' format "❰"
 
   # Vim overwrite mode.
   zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
 
   # Vim normal (command) mode.
-  zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰ "
+  if zstyle -T ':prezto:module:prompt' show-return-val; then
+    zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰"
+
+  else
+    zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰${prompt_garrett_color_prompt}❰❰"
+  fi
 
   # Tab completion mode.
   zstyle ':prezto:module:editor:info:completing' format "${red}..."
@@ -444,17 +454,11 @@ function prompt_garrett_setup {
   # Print out the prompt.
   #
 
-  # Left prompt; base shell level.
-  if (( $SHLVL == 1 )); then
-    export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}'
-
-  # Left prompt; nested shell level.
-  else
-    export PROMPT='${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}( ${cyan}$SHLVL ${prompt_garrett_color_prompt}) ${editor_info[keymap]}'
-  fi
+  # Left prompt
+  export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]} '
 
   # Right prompt.
-  export RPROMPT='${editor_info[alternate]}${editor_info[overwrite]}${prompt_garrett_return_code}${prompt_garrett_number_jobs}${prompt_garrett_line_number} ${prompt_garrett_current_time} %(?.${prompt_garrett_color_prompt}.${red})❰${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
+  export RPROMPT='${prompt_garrett_color_prompt}${prompt_garrett_return_code}${prompt_garrett_number_jobs} ${editor_info[alternate]}${editor_info[insert]}${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
 
   # Continuation prompt.
   export PROMPT2='(%_) ${editor_info[keymap]}'
@@ -469,9 +473,6 @@ function prompt_garrett_setup {
   # Autocorrection prompt.
   export SPROMPT='
 ${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
-
-  # Backup root prompt for Bash.
-  export SUDO_PS1="\[\e[31;1;46m\][\u] \w \$\[\e[0m\] "
 }
 
 prompt_garrett_setup "$@"
