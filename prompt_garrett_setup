@@ -195,9 +195,6 @@ function prompt_garrett_preexec {
   # Define timer and command for notification.
 	typeset -g prompt_garrett_cmd_timestamp=$EPOCHSECONDS
   typeset -g prompt_garrett_preexec_cmd="\$ $1"
-
-  # Ensure terminal code isn't colored from prompt.
-  print -n "$reset_color"
 }
 
 # Functions called before each prompt is displayed.
@@ -206,7 +203,7 @@ function prompt_garrett_precmd {
   unsetopt XTRACE KSH_ARRAYS
 
   # Show number of background jobs.
-  prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:${cyan}%j .)"
+  prompt_garrett_number_jobs="%(1j.${prompt_garrett_color_prompt}J:%F{cyan}%j .)"
 
   # Format PWD.
   prompt_garrett_pwd="${prompt_garrett_color_pwd}$(prompt-pwd)"
@@ -234,7 +231,7 @@ function prompt_garrett_preprompt_render() {
   #
 
   # 24 hour time format
-  prompt_garrett_current_time="${green}$(date '+%l:%M %p')"
+  prompt_garrett_current_time="%F{green}$(date '+%l:%M %p')"
 
   # Determine the width.
   local prompt_garrett_width_terminal
@@ -279,24 +276,12 @@ function prompt_garrett_setup {
   # Colors
   #
 
-  # Alias the colors.
-  [[ -z $(functions colors) ]] && autoload -U colors && colors
-  for color in red green yellow blue magenta cyan white grey; do
-
-    # Normal colors.
-    eval $color='%F{${(L)color}}'
-
-    # Bold colors.
-    eval ${color}_bold='%B{${(L)color}}'
-  done
-
   # Color scheme.
-  eval prompt_garrett_color_pwd=\$\{${2:-'${blue}'}\}
-  # eval prompt_garrett_color_pwd=${2:-'${blue}'}
-  # eval prompt_garrett_color_line_number=${5:-'${magenta}'}
-  # eval prompt_garrett_color_time=${6:-'${green}'}
-  # eval prompt_garrett_color_git_branch=${7:-'${green}'}
-  # eval prompt_garrett_color_git_sha=${8:-'${yellow}'}
+  prompt_garrett_color_pwd=${2:-'%F{blue}'}
+  # prompt_garrett_color_line_number=${5:-'%F{magenta}'}
+  # prompt_garrett_color_time=${6:-'%F{green}'}
+  # prompt_garrett_color_git_branch=${7:-'%F{green}'}
+  # prompt_garrett_color_git_sha=${8:-'%F{yellow}'}
 
   # Override the default clear-screen so that ^L displays the prompt in its
   # entirety.
@@ -312,9 +297,9 @@ function prompt_garrett_setup {
   if [[ "$EUID" = "0" ]] || [[ "$USER" = 'root' ]]; then
 
     # Set colors.
-    eval prompt_garrett_color_user=${3:-'${red}'}
-    eval prompt_garrett_color_host=${3:-'${red}'}
-    eval prompt_garrett_color_prompt=${3:-'${red}'}
+    eval prompt_garrett_color_user=${3:-'%F{red}'}
+    eval prompt_garrett_color_host=${3:-'%F{red}'}
+    eval prompt_garrett_color_prompt=${3:-'%F{red}'}
 
     # Set style.
     eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
@@ -324,9 +309,9 @@ function prompt_garrett_setup {
   elif [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
 
     # Set colors.
-    eval prompt_garrett_color_user=${3:-'${green}'}
-    eval prompt_garrett_color_host=${3:-'${yellow}'}
-    eval prompt_garrett_color_prompt=${3:-'${yellow}'}
+    eval prompt_garrett_color_user=${3:-'%F{green}'}
+    eval prompt_garrett_color_host=${3:-'%F{yellow}'}
+    eval prompt_garrett_color_prompt=${3:-'%F{yellow}'}
 
     # Set style.
     eval prompt_garrett_user='%S${prompt_garrett_color_user}%n%s'
@@ -336,23 +321,23 @@ function prompt_garrett_setup {
   else
 
     # Set colors.
-    eval prompt_garrett_color_user=${1:-'${green}'}
-    eval prompt_garrett_color_host=${1:-'${green}'}
-    eval prompt_garrett_color_prompt=${1:-'${grey}'}
+    eval prompt_garrett_color_user=${1:-'%F{green}'}
+    eval prompt_garrett_color_host=${1:-'%F{green}'}
+    eval prompt_garrett_color_prompt=${1:-'%F{grey}'}
 
     # Set style.
     eval prompt_garrett_user=''
     eval prompt_garrett_host='${prompt_garrett_color_host}%m' # hostname up to first . (dot) (use %M for full hostname)
   fi
 
-  eval prompt_garrett_location='${prompt_garrett_user}${cyan}@${prompt_garrett_host}' # user@host.name
+  eval prompt_garrett_location='${prompt_garrett_user}%F{cyan}@${prompt_garrett_host}' # user@host.name
 
   #
   # Report return code.
   #
 
   if zstyle -T ':prezto:module:prompt' show-return-val; then
-    eval prompt_garrett_return_code='%(?..${red}%? ⏎  ) '
+    eval prompt_garrett_return_code='%(?..%F{red}%? ⏎  ) '
 
   else
     unset prompt_garrett_return_code
@@ -380,7 +365,7 @@ function prompt_garrett_setup {
   # Report terminal line number.
   #
 
-  eval prompt_garrett_line_number='${green}+${magenta}%!'
+  eval prompt_garrett_line_number='%F{green}+%F{magenta}%!'
 
   #
   # Report git info.
@@ -391,29 +376,29 @@ function prompt_garrett_setup {
   # zstyle ':prezto:module:git:info' verbose 'yes'
 
   # Git prompt info.
-  zstyle ':prezto:module:git:info:branch'    format "${cyan} λ${prompt_garrett_color_prompt}:${green}%b"
+  zstyle ':prezto:module:git:info:branch'    format "%F{cyan} λ${prompt_garrett_color_prompt}:%F{green}%b"
   zstyle ':prezto:module:git:info:remote'    format ""
-  zstyle ':prezto:module:git:info:action'    format "${yellow} %s"
-  zstyle ':prezto:module:git:info:position'  format "${red} %p"
+  zstyle ':prezto:module:git:info:action'    format "%F{yellow} %s"
+  zstyle ':prezto:module:git:info:position'  format "%F{red} %p"
 
   # Git commit SHA.
-  zstyle ':prezto:module:git:info:commit'    format "${yellow} %.7c"
+  zstyle ':prezto:module:git:info:commit'    format "%F{yellow} %.7c"
 
   # Git remote status.
-  zstyle ':prezto:module:git:info:behind'    format "${magenta} ⬇ "
-  zstyle ':prezto:module:git:info:ahead'     format "${magenta} ⬆ "
-  zstyle ':prezto:module:git:info:diverged'  format "${magenta} ⥮"
-  zstyle ':prezto:module:git:info:stashed'   format "${cyan} ✭"
+  zstyle ':prezto:module:git:info:behind'    format "%F{magenta} ⬇ "
+  zstyle ':prezto:module:git:info:ahead'     format "%F{magenta} ⬆ "
+  zstyle ':prezto:module:git:info:diverged'  format "%F{magenta} ⥮"
+  zstyle ':prezto:module:git:info:stashed'   format "%F{cyan} ✭"
 
   # Git local status.
   zstyle ':prezto:module:git:info:clean'     format ""
   zstyle ':prezto:module:git:info:dirty'     format "${prompt_garrett_color_prompt} |"
-  zstyle ':prezto:module:git:info:added'     format "${green} ✚"
-  zstyle ':prezto:module:git:info:deleted'   format "${red} ✗"
-  zstyle ':prezto:module:git:info:modified'  format "${blue} ✱"
-  zstyle ':prezto:module:git:info:renamed'   format "${magenta} ➜"
-  zstyle ':prezto:module:git:info:unmerged'  format "${yellow} ═"
-  zstyle ':prezto:module:git:info:untracked' format "${white} ◼"
+  zstyle ':prezto:module:git:info:added'     format "%F{green} ✚"
+  zstyle ':prezto:module:git:info:deleted'   format "%F{red} ✗"
+  zstyle ':prezto:module:git:info:modified'  format "%F{blue} ✱"
+  zstyle ':prezto:module:git:info:renamed'   format "%F{magenta} ➜"
+  zstyle ':prezto:module:git:info:unmerged'  format "%F{yellow} ═"
+  zstyle ':prezto:module:git:info:untracked' format "%F{white} ◼"
 
   # Git prompt styles.
   zstyle ':prezto:module:git:info:keys' format \
@@ -429,28 +414,28 @@ function prompt_garrett_setup {
 
   # Base style.
   if zstyle -T ':prezto:module:prompt' show-return-val; then
-    zstyle ':prezto:module:editor:info:keymap:primary' format "%(?.${prompt_garrett_color_prompt}.${red})❱❱${red}❱"
+    zstyle ':prezto:module:editor:info:keymap:primary' format "%(?.${prompt_garrett_color_prompt}.%F{red})❱❱%F{red}❱"
 
   else
-    zstyle ':prezto:module:editor:info:keymap:primary' format "${prompt_garrett_color_prompt}❱❱${red}❱"
+    zstyle ':prezto:module:editor:info:keymap:primary' format "${prompt_garrett_color_prompt}❱❱%F{red}❱"
   fi
 
   # Vim insert mode.
   zstyle ':prezto:module:editor:info:keymap:primary:insert' format "❰"
 
   # Vim overwrite mode.
-  zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "${red}♺ "
+  zstyle ':prezto:module:editor:info:keymap:primary:overwrite' format "%F{red}♺ "
 
   # Vim normal (command) mode.
   if zstyle -T ':prezto:module:prompt' show-return-val; then
-    zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰%(?.${prompt_garrett_color_prompt}.${red})❰❰"
+    zstyle ':prezto:module:editor:info:keymap:alternate' format "%F{red}❰%(?.${prompt_garrett_color_prompt}.%F{red})❰❰"
 
   else
-    zstyle ':prezto:module:editor:info:keymap:alternate' format "${red}❰${prompt_garrett_color_prompt}❰❰"
+    zstyle ':prezto:module:editor:info:keymap:alternate' format "%F{red}❰${prompt_garrett_color_prompt}❰❰"
   fi
 
   # Tab completion mode.
-  zstyle ':prezto:module:editor:info:completing' format "${red}..."
+  zstyle ':prezto:module:editor:info:completing' format "%F{red}..."
 
   #
   # Use the extended character set, if available.
@@ -483,24 +468,24 @@ function prompt_garrett_setup {
   #
 
   # Left prompt
-  export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]} '
+  export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}%F{none} '
 
   # Right prompt.
-  export RPROMPT='${prompt_garrett_color_prompt}${prompt_garrett_return_code}${prompt_garrett_number_jobs} ${editor_info[alternate]}${editor_info[insert]}${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}'
+  export RPROMPT='${prompt_garrett_color_prompt}${prompt_garrett_return_code}${prompt_garrett_number_jobs} ${editor_info[alternate]}${editor_info[insert]}${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}%F{none}'
 
   # Continuation prompt.
-  export PROMPT2='(%_) ${editor_info[keymap]}'
+  export PROMPT2='(%_) ${editor_info[keymap]}%F{none}'
 
   # Selection prompt.
   export PROMPT3='
-(?) ${editor_info[keymap]}'
+(?) ${editor_info[keymap]}%F{none}'
 
   # Execution trace prompt.
-  export PROMPT4='${yellow}+${blue}%N ${green}@${magenta}%i ${reset_color}'
+  export PROMPT4='%F{yellow}+%F{blue}%N %F{green}@%F{magenta}%i%F{none} '
 
   # Autocorrection prompt.
   export SPROMPT='
-${prompt_garrett_color_prompt}Correct ${red}%R${prompt_garrett_color_prompt} to ${green}%r${prompt_garrett_color_prompt} ? [nyae] '
+${prompt_garrett_color_prompt}Correct %F{red}%R${prompt_garrett_color_prompt} to %F{green}%r${prompt_garrett_color_prompt} ? [nyae]%F{none} '
 }
 
 prompt_garrett_setup "$@"
