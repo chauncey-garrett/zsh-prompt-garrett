@@ -80,7 +80,7 @@ zmodload -i zsh/datetime
 function prompt_garrett_precmd_notification {
 
   # n seconds have passed, so notify!
-  if [[ -n $prompt_pure_cmd_exec_time ]]; then
+  if [[ -n $prompt_garrett_cmd_exec_time ]]; then
 
     # Notify via tput while on ssh.
     if [[ -n "$SSH_CLIENT" || -n "$SSH2_CLIENT" ]]; then
@@ -88,7 +88,7 @@ function prompt_garrett_precmd_notification {
 
     # Use local notifications.
     else
-      local message="Took $prompt_pure_cmd_exec_time"
+      local message="Took $prompt_garrett_cmd_exec_time"
 
       # On macOS, notify with terminal-notifier.
       if [[ "$OSTYPE" == darwin* ]] && (( $+commands[terminal-notifier] )); then
@@ -164,7 +164,7 @@ function prompt_garrett_chpwd {
 # Turns seconds into human readable time
 # 165392 => 1d 21h 56m 32s
 # https://github.com/sindresorhus/pretty-time-zsh
-function prompt_pure_human_time_to_var() {
+function prompt_garrett_human_time_to_var() {
 	local human total_seconds=$1 var=$2
 	local days=$(( total_seconds / 60 / 60 / 24 ))
 	local hours=$(( total_seconds / 60 / 60 % 24 ))
@@ -179,13 +179,13 @@ function prompt_pure_human_time_to_var() {
 	typeset -g "${var}"="${human}"
 }
 
-# Stores (into prompt_pure_cmd_exec_time) the exec time of the last command, if set threshold was exceeded
-function prompt_pure_check_cmd_exec_time() {
+# Stores (into prompt_garrett_cmd_exec_time) the exec time of the last command, if set threshold was exceeded
+function prompt_garrett_check_cmd_exec_time() {
 	integer elapsed
-	(( elapsed = EPOCHSECONDS - ${prompt_pure_cmd_timestamp:-$EPOCHSECONDS} ))
-	typeset -g prompt_pure_cmd_exec_time=
+	(( elapsed = EPOCHSECONDS - ${prompt_garrett_cmd_timestamp:-$EPOCHSECONDS} ))
+	typeset -g prompt_garrett_cmd_exec_time=
 	(( elapsed > ${PURE_CMD_MAX_EXEC_TIME:-2} )) && {
-		prompt_pure_human_time_to_var $elapsed "prompt_pure_cmd_exec_time"
+		prompt_garrett_human_time_to_var $elapsed "prompt_garrett_cmd_exec_time"
 	}
 }
 
@@ -193,7 +193,7 @@ function prompt_pure_check_cmd_exec_time() {
 function prompt_garrett_preexec {
 
   # Define timer and command for notification.
-	typeset -g prompt_pure_cmd_timestamp=$EPOCHSECONDS
+	typeset -g prompt_garrett_cmd_timestamp=$EPOCHSECONDS
   typeset -g prompt_garrett_preexec_cmd="\$ $1"
 
   # Ensure terminal code isn't colored from prompt.
@@ -212,8 +212,8 @@ function prompt_garrett_precmd {
   prompt_garrett_pwd="${prompt_garrett_color_pwd}$(prompt-pwd)"
 
 	# check exec time and store it in a variable
-	prompt_pure_check_cmd_exec_time
-	unset prompt_pure_cmd_timestamp
+	prompt_garrett_check_cmd_exec_time
+	unset prompt_garrett_cmd_timestamp
 
   # Trigger a notification after x time has elapsed.
   prompt_garrett_precmd_notification
