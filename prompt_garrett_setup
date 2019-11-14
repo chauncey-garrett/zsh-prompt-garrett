@@ -192,9 +192,14 @@ function prompt_garrett_check_cmd_exec_time() {
 # Functions called before command execution.
 function prompt_garrett_preexec {
 
-  # Define timer and command for notification.
-	typeset -g prompt_garrett_cmd_timestamp=$EPOCHSECONDS
-  typeset -g prompt_garrett_preexec_cmd="\$ $1"
+  # No cmd_timestamp and preexec_cmd should be defined if there was no actual
+  # command executed, e. g. if the command prompt was aborted with ^C or blank
+  # line instead of actual command provided
+  if [[ "$1" != '' ]]; then
+    # Define timer and command for notification
+    typeset -g prompt_garrett_cmd_timestamp=$EPOCHSECONDS
+    typeset -g prompt_garrett_preexec_cmd="\$ $1"
+  fi
 }
 
 # Functions called before each prompt is displayed.
@@ -208,12 +213,15 @@ function prompt_garrett_precmd {
   # Format PWD.
   prompt_garrett_pwd="${prompt_garrett_color_pwd}$(prompt-pwd)"
 
-	# check exec time and store it in a variable
-	prompt_garrett_check_cmd_exec_time
-	unset prompt_garrett_cmd_timestamp
+  # Don't notify if no valid command was provided to the last prompt
+  if (( ${+prompt_garrett_cmd_timestamp} )); then
+    # check exec time and store it in a variable
+    prompt_garrett_check_cmd_exec_time
+    unset prompt_garrett_cmd_timestamp
 
-  # Trigger a notification after x time has elapsed.
-  prompt_garrett_precmd_notification
+    # Trigger a notification after x time has elapsed.
+    prompt_garrett_precmd_notification
+  fi
 
   # Get Git repository info.
   if (( $+functions[git-info] )); then
