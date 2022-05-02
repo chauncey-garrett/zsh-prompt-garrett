@@ -468,25 +468,25 @@ function prompt_garrett_setup {
   #
 
   # Left prompt
-  export PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}%F{none} '
+  PROMPT='${prompt_garrett_altchar_enable}${prompt_garrett_color_prompt}${prompt_garrett_lower_left_corner}${editor_info[keymap]}%F{none} '
 
   # Right prompt.
-  export RPROMPT='${prompt_garrett_color_prompt}${prompt_garrett_return_code}${prompt_garrett_number_jobs} ${editor_info[alternate]}${editor_info[insert]}${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}%F{none}'
+  RPROMPT='${prompt_garrett_color_prompt}${prompt_garrett_return_code}${prompt_garrett_number_jobs} ${editor_info[alternate]}${editor_info[insert]}${prompt_garrett_color_prompt}${prompt_garrett_lower_right_corner}%F{none}'
 
   # Continuation prompt.
-  export PROMPT2='(%_) ${editor_info[keymap]}%F{none}'
+  PROMPT2='(%_) ${editor_info[keymap]}%F{none}'
 
   # Selection prompt.
-  export PROMPT3='
+  PROMPT3='
 (?) ${editor_info[keymap]}%F{none}'
 
   # Execution trace prompt.
-  export PROMPT4='%F{yellow}+%F{blue}%N %F{green}@%F{magenta}%i%F{none} '
+  PROMPT4='%F{yellow}+%F{blue}%N %F{green}@%F{magenta}%i%F{none} '
 
   # Autocorrection prompt.
-  export SPROMPT='
+  SPROMPT='
 ${prompt_garrett_color_prompt}Correct %F{red}%R${prompt_garrett_color_prompt} to %F{green}%r${prompt_garrett_color_prompt} ? [nyae]%F{none} '
 }
 
 prompt_garrett_setup "$@"
-
+# vim: ft=zsh
